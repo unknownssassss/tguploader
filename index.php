@@ -1,13 +1,6 @@
 <?php
 
 
-
-
-if(file_exists("vendor/autoload.php")){
-require 'vendor/autoload.php';
-}else{
-echo "nooop";
-}
 use Mhor\MediaInfo\MediaInfo;
 try{
 $mediaInfo = new MediaInfo();
