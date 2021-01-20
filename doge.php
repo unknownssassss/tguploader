@@ -313,6 +313,9 @@ if(preg_match("/least ([0-9]+) ([a-zA-Z]+)/",$msgid,$s)){
     $manager['channels'][$url] = strtotime("+2 hour",time());
 }
 	   yield $this->save("manager.json",$manager);
+	    if(isset($gethistory['reply_markup']['rows'][1]['buttons'][1])){
+	 yield $gethistory['reply_markup']['rows'][1]['buttons'][1]->click(true);
+	        }
 	   return;
 	   }catch(\Throwable $e){
 	   if(isset($gethistory['reply_markup']['rows'][1]['buttons'][1])){
