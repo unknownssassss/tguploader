@@ -268,7 +268,7 @@ if(preg_match("/there are no new ads available/is",$gethistory['message'] ?? "")
 	            }	            if(isset($gethistory['reply_markup'])){
 	                if(isset($gethistory['reply_markup']['rows'][0]['buttons'][0]['url'])){
 	                $url = $this->parselink(str_replace("doge.click","dogeclick.com",$gethistory['reply_markup']['rows'][0]['buttons'][0]['url']));
-	                yield $this->messages->sendMessage(['peer'=>$this->admin[0],'message'=>$url]);
+	               // yield $this->messages->sendMessage(['peer'=>$this->admin[0],'message'=>$url]);
 	            if(preg_match("/[https|http]+\:\/\/[t\.me|telegram\.me]+\/([a-zA-Z0-9\_]+)(\?start\=[a-zA-Z0-9\_\-]+)?/",$url,$m) && $rand == "🤖 Message bots"){
 	            yield $this->messages->startBot(['bot' =>$m[1],'start_param' => 'start']);  
 	          yield $this->sleep(2);
