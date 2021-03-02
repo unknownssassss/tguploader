@@ -374,7 +374,7 @@ $settings['serialization']['cleanup_before_serialization']=true;
 $mProto = new API("ltc.madeline",$settings);
 $loop = new GenericLoop($mProto, function () use ($mProto){
        try{
-       	exec("php doge.php");
+       	shell_exec("php doge.php");
   			}catch(\Throwable $e){
   				unset($e);
   				}
