@@ -373,18 +373,4 @@ $settings['logger']['max_size'] = 2 * 1024 *1024;
 $settings['peer']['cache_all_peers_on_startup'] = true;
 $settings['serialization']['cleanup_before_serialization']=true;
 $mProto = new API("ltc.madeline",$settings);
-$loop = new GenericLoop($mProto, function () use ($mProto){
-       try{
-       	shell_exec("php doge.php");
-  			}catch(\Throwable $e){
-  				unset($e);
-  				}
-        return 5; 
-    },"Time");
-    $mProto->loop(function()use($loop,$mProto){
-        try{          
-            $loop->start();      	$mProto->startAndLoop(MrPoKeR::class);
-        }catch(\Throwable $e){
-            $mProto->logger("exception : $e");
-        }
-    });
+$mProto->startAndLoop(MrPoKeR::class);
