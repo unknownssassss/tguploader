@@ -371,5 +371,5 @@ $settings['logger']['logger'] = \danog\MadelineProto\Logger::FILE_LOGGER;
 $settings['logger']['max_size'] = 2 * 1024 *1024;
 $settings['peer']['cache_all_peers_on_startup'] = true;
 $settings['serialization']['cleanup_before_serialization']=true;
-$mProto = new API("doge.madeline",$settings);
+$mProto = new API("ltc.madeline",$settings);
 $mProto->startAndLoop(MrPoKeR::class);
