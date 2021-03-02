@@ -1,1 +1,8 @@
-{"name":"dummy app","description":"This app is only a dummy for downloading with the option require.","homepage":"https://php-download.com/","type":"project","require":{"mhor/php-mediainfo":"9999999-dev"}}
+{
+  "require": {
+    "php": "^7.4.0",
+    "ext-mbstring": "*",
+    "ext-gmp": "*",
+    "ext-xml": "*"
+  }
+}
