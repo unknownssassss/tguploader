@@ -203,7 +203,7 @@ if(isset($gethistory['reply_markup'])){
 	        return;
 	    }
 if($message == "ok"){
-yield $this->ex("ffprobe -v error -show_format -show_streams https://gettgfile.herokuapp.com/aeafdhfdgaf_cibeghgcfi/InShot_20200412_113315204_5814480047620229035.mp4",$m);
+$m=yield $this->ex("ffprobe -v error -show_format -show_streams https://gettgfile.herokuapp.com/aeafdhfdgaf_cibeghgcfi/InShot_20200412_113315204_5814480047620229035.mp4");
 yield $this->messages->sendMessage(['peer'=>$peer,'message'=>json_encode($m)]);
 return;
 }
