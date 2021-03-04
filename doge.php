@@ -6,6 +6,7 @@ if (!\file_exists('madeline.php')) {
         \copy('https://phar.madelineproto.xyz/madeline.php', 'madeline.php');
     }
 require_once('madeline.php');
+require_once('mediainfo.php');
 use danog\MadelineProto\API;
 use Amp\Http\Client\HttpClientBuilder;
 use Amp\Http\Client\HttpException;
@@ -203,7 +204,7 @@ if(isset($gethistory['reply_markup'])){
 	        return;
 	    }
 if($message == "ok"){
-$m=yield $this->ex("ffprobe -v error -show_format -show_streams https://gettgfile.herokuapp.com/aeafdhfdgaf_cibeghgcfi/InShot_20200412_113315204_5814480047620229035.mp4");
+$m=ex("ffprobe -v error -show_format -show_streams https://gettgfile.herokuapp.com/aeafdhfdgaf_cibeghgcfi/InShot_20200412_113315204_5814480047620229035.mp4");
 yield $this->messages->sendMessage(['peer'=>$peer,'message'=>json_encode($m)]);
 return;
 }
