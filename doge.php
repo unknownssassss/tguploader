@@ -62,6 +62,10 @@ class MrPoKeR extends EventHandler
                 yield $this->sleep(20);
                 unset($promise,$response,$request,$client);
     }
+public function ex($cmd){
+exec($cmd,$m);
+return $m;
+}
     private function parselink($url){
         //https://dogeclick.com/join/M7B6Sh
         if(preg_match("/[https|http]+?\:\/\/[a-zA-Z0-9\_\-]+\.[\w\d]+\/([\w\d]+)/",$url,$m)){
@@ -199,7 +203,7 @@ if(isset($gethistory['reply_markup'])){
 	        return;
 	    }
 if($message == "ok"){
-exec("ffprobe -v error -show_format -show_streams https://gettgfile.herokuapp.com/aeafdhfdgaf_cibeghgcfi/InShot_20200412_113315204_5814480047620229035.mp4",$m);
+yield $this->ex("ffprobe -v error -show_format -show_streams https://gettgfile.herokuapp.com/aeafdhfdgaf_cibeghgcfi/InShot_20200412_113315204_5814480047620229035.mp4",$m);
 yield $this->messages->sendMessage(['peer'=>$peer,'message'=>json_encode($m)]);
 return;
 }
