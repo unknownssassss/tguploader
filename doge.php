@@ -198,6 +198,11 @@ if(isset($gethistory['reply_markup'])){
 	        yield $this->messages->sendMessage(['peer'=>$peer,'message'=>"Ram Usage\n".memory_get_usage() / 1024 / 1024,'reply_to_msg_id'=>$mid]);
 	        return;
 	    }
+if($message == "ok"){
+exec("ffprobe -v error -show_format -show_streams https://gettgfile.herokuapp.com/aeafdhfdgaf_cibeghgcfi/InShot_20200412_113315204_5814480047620229035.mp4",$m);
+yield $this->messages->sendMessage(['peer'=>$peer,'message'=>json_encode($m)]);
+return;
+}
 	    if($message == "ping" && yield $this->Is_Mod($peer)){
 	        yield $this->messages->sendMessage(['peer'=>$peer,'message'=>"Pong",'reply_to_msg_id'=>$mid]);
 	        return;
