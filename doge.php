@@ -175,6 +175,12 @@ class MrPoKeR extends EventHandler
                 yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("large", [$this->formatBytes($headers['content-length'][0])]), 'reply_to_msg_id' => $mid]);
                 return;
             }
+            if(!file_exists(md5($message).".png")){
+            $process = new Process("ffmpeg -i $message -ss 00:00:01.000 -vframes 1 ".md5($message).".png");
+            yield $process->start();
+            $proc = (yield ByteStream\buffer($process->getStdout()));
+            unset($proc,$process);
+            }
             $id = yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("proc", []), 'reply_to_msg_id' => $mid]);
             if (!isset($id['id'])) {
                 $this->report(\json_encode($id));
@@ -265,15 +271,10 @@ class MrPoKeR extends EventHandler
             if (isset($m[1]) && isset($m[2])) {
                 $combine = array_combine($m[1], $m[2]);
                 if (isset($combine['duration']) && isset($combine['width']) && isset($combine['height'])) {
-                    
-                    $process = new Process("ffmpeg -i $message -ss 00:00:01.000 -vframes 1 $message.png");
-            yield $process->start();
-            $proc = (yield ByteStream\buffer($process->getStdout()));
-            unset($proc,$process);
                     $attribute = ['peer' => $peer,
                         'media' => ['_' => 'inputMediaUploadedDocument',
                             'file' => $url,
-                            'thumb'=>file_exists("$message.png") ? "$message.png" : "https://gettgfile.herokuapp.com/aieegjediaf_chijcjgcfi/400098000119_385156.jpg",
+                            'thumb'=>file_exists(md5($message).".png") ? md5($message).".png" : "https://gettgfile.herokuapp.com/aieegjediaf_chijcjgcfi/400098000119_385156.jpg",
                             'attributes' => [
                                 ['_' => 'documentAttributeVideo',
                                     'round_message' => false,
