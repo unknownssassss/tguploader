@@ -190,6 +190,8 @@ class MrPoKeR extends EventHandler
                     {
                         return;
                     }
+                    $filename = md5($message).".".$result['result'];
+                        $filesize = $headers['content-length'];
                     $time3 = time() - $time2;
                     $prev = $now;
                     $current = $progress / 100 * $filesize;
@@ -200,8 +202,7 @@ class MrPoKeR extends EventHandler
                     $k = ["⏳", "⌛"];
                     try
                     {
-                        $filename = md5($message).".".$result['result'];
-                        $filesize = $headers['content-length'];
+                        
                         $tmp = "File : " . $filename . "\nDownloading : " . round($progress) . "%\n[" . $this->ProgRe("▫️", "◾️", $progress, 100, 10, "") . $k[array_rand($k) ] . "]\n" . $this->formatBytes($current) . " of " . $this->formatBytes($filesize) . "\nSpeed : " . $this->formatBytes($speed) . "/Sec\nETA : " . $this->XForEta($elap) . " / " . $ett . "\n@SkyTeam";
                         yield $this
                             ->messages
