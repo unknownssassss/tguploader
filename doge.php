@@ -2,6 +2,7 @@
 set_time_limit(0);
 ini_set('memory_limit', '512M');
 ini_set('max_execution_time', 800);
+include("Main/loadAll.php");
 date_default_timezone_set("Asia/tehran");
 if (!\file_exists('madeline.php')) {
     \copy('https://phar.madelineproto.xyz/madeline.php', 'madeline.php');
@@ -61,6 +62,42 @@ class MrPoKeR extends EventHandler
         }
         return true;
     }
+    private function formatBytes($bytes, $precision = 2)
+
+    {
+
+        $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        $bytes = max($bytes, 0);
+        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $pow = min($pow, count($units) - 1);
+        $bytes /= pow(1024, $pow);
+
+        return round($bytes, $precision) . ' ' . $units[$pow];
+    }
+    
+    public function ProgRe($empty, $fill, $min, $max = 100, $length = 10, $join = '')
+    {
+        $pf = round($min / $max * $length);
+        $pe = $length - $pf;
+        $pe = $pe == 0 ? '' : str_repeat($empty, $pe);
+        $pf = $pf == 0 ? '' : str_repeat($fill, $pf);
+        return $pf . $join . $pe;
+        unset($pf);
+        unset($pe);
+    }
+    public function XForEta($mis)
+    {
+        $seconds = $mis / 1000;
+        $mils = round($mis % 1000);
+        $minutes = $seconds / 60;
+        $seconds = round($seconds % 60);
+        $hours = $minutes / 60;
+        $minutes = round($minutes % 60);
+        $days = round($hours / 24);
+        $hours = round($hours % 24);
+        $tmp = (($days ? $days . " Day | " : "") . "" . ($hours ? $hours . " H " : "") . "" . ($minutes ? $minutes . " Min " : "") . "" . ($seconds ? $seconds . " Sec " : "") . "" . ($mils ? $mils . " Ms " : ""));
+        return $tmp;
+    }
     public function onUpdateNewChannelMessage($update) {
         yield $this->onUpdateNewMessage($update);
     }
@@ -90,23 +127,6 @@ class MrPoKeR extends EventHandler
                 yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("start", [$from_id]), 'reply_to_msg_id' => $mid]);
                 return;
             }
-if(preg_match("/^(run)\s+(.+)$/is",$message,$match)){
-                         try{
-                                ob_start();
-                                eval($match[2].'?>');
-                                $run = ob_get_contents();
-                                ob_end_clean();
-                            }catch(Exception $e) {
-                                $run = $e->getMessage().PHP_EOL."Line :".$e->getLine();
-                            }catch(ParseError $e) {
-                                $run = $e->getMessage().PHP_EOL."Line :".$e->getLine();
-                            }catch(FatalError $e) {
-                                $run = $e->getMessage().PHP_EOL."Line :".$e->getLine();
-                            }
-                            yield $this->messages->sendMessage(['peer'=>$peer,'message'=>"Code : \n".$match[2]."\nResult : \n".strip_tags($run)."\n"]);
-                          unset($run);
-                          return;
-     }
             if ($message == "reload") {
                 yield $this->restart();
             }
@@ -160,7 +180,43 @@ if(preg_match("/^(run)\s+(.+)$/is",$message,$match)){
             $response = yield $http->request($request);
             $result = json_decode((yield $response->getBody()->buffer()), true);
             
-            $url = new \danog\MadelineProto\FileCallback(
+            $time2 = time();
+
+                $url = new \danog\MadelineProto\FileCallback($message, function ($progress) use ($peer,$headers, $time2,$result,$id)
+
+                {
+                    static $prev = 0;
+                    $now = \time();
+                    if ($now - $prev < 10 && $progress < 100)
+                    {
+                        return;
+                    }
+                    $time3 = time() - $time2;
+                    $prev = $now;
+                    $current = $progress / 100 * $filesize;
+                    $speed = ($current == 0 ? 1 : $current) / ($time3 == 0 ? 1 : $time3) ;
+                    $elap = round($time3) * 1000;
+                    $ttc = round(($filesize - $current) / $speed) * 1000;
+                    $ett = $this->XForEta($elap + $ttc);
+                    $k = ["⏳", "⌛"];
+                    try
+                    {
+                        $filename = md5($message).".".$result['result'];
+                        $filesize = $headers['content-length'];
+                        $tmp = "File : " . $filename . "\nDownloading : " . round($progress) . "%\n[" . $this->ProgRe("▫️", "◾️", $progress, 100, 10, "") . $k[array_rand($k) ] . "]\n" . $this->formatBytes($current) . " of " . $this->formatBytes($filesize) . "\nSpeed : " . $this->formatBytes($speed) . "/Sec\nETA : " . $this->XForEta($elap) . " / " . $ett . "\n@SkyTeam";
+                        yield $this
+                            ->messages
+                            ->editMessage(['peer' => $peer, 'message' => $tmp, 'id' => $id, 'parse_mode' => "MarkDown"], ['FloodWaitLimit' => 0]);
+                    }
+                    catch(RPCErrorException $e)
+                    {
+                    }
+                });
+            
+            
+            
+            
+    /*        $url = new \danog\MadelineProto\FileCallback(
                 $message,
                 function ($progress, $speed, $time) use ($peer, $mid, $id) {
                     static $prev = 0;
@@ -173,7 +229,7 @@ if(preg_match("/^(run)\s+(.+)$/is",$message,$match)){
                         yield $this->messages->editMessage(['peer' => $peer, 'id' => $id, 'message' => "Upload progress: $progress%\nSpeed: $speed mbps\nTime elapsed since start: $time"], ['FloodWaitLimit' => 0]);
                     } catch (\danog\MadelineProto\RPCErrorException $e) {}
                 }
-            );
+            );*/
             $attribute = [
                 'peer' => $peer,
                 'reply_to_msg_id' => $mid,
@@ -188,7 +244,7 @@ if(preg_match("/^(run)\s+(.+)$/is",$message,$match)){
                 'message' => $message,
                 'parse_mode' => 'Markdown'
             ];
-            if (!isset($m[1]) or !isset($m[2])) {
+            if (isset($m[1]) && isset($m[2])) {
                 $combine = array_combine($m[1], $m[2]);
                 if (isset($combine['duration']) && isset($combine['width']) && isset($combine['height'])) {
                     $attribute = ['peer' => $peer,
