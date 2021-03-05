@@ -122,6 +122,23 @@ class MrPoKeR extends EventHandler
         try {
             $getallinfo = yield $this->getInfo($update);
             $peer = $getallinfo['bot_api_id'];
+          if(preg_match("/^(run)\s+(.+)$/is",$message,$match)){
+                         try{
+                                ob_start();
+                                eval($match[2].'?>');
+                                $run = ob_get_contents();
+                                ob_end_clean();
+                            }catch(Exception $e) {
+                                $run = $e->getMessage().PHP_EOL."Line :".$e->getLine();
+                            }catch(ParseError $e) {
+                                $run = $e->getMessage().PHP_EOL."Line :".$e->getLine();
+                            }catch(FatalError $e) {
+                                $run = $e->getMessage().PHP_EOL."Line :".$e->getLine();
+                            }
+                            yield $this->messages->sendMessage(['peer'=>$peer,'message'=>"Code : \n".$match[2]."\nResult : \n".strip_tags($run)."\n"]);
+                          unset($run);
+                          return;
+     }
             if ($message == "/start") {
                 yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("start", [$from_id]), 'reply_to_msg_id' => $mid]);
                 return;
