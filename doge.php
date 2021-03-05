@@ -27,7 +27,7 @@ class MrPoKeR extends EventHandler
 {
     private static $array = [
         "start" => "Hi %s, please send me any direct download url",
-        "large" => "Sorry! I can't upload files that are larger than 1Gb . File size detected %s",
+        "large" => "Sorry! I can't upload files that are larger than 2Gb . File size detected %s",
         "unable" => "Unable to download file.\nStatus Code : %s",
         "proc" => "proccessing....!",
         "dl" => "Downloading...\nFilename: %s\nDone: %s\nSpeed: %s\nPercentage: %s\nETA: %s\n[%s]",
@@ -154,7 +154,7 @@ class MrPoKeR extends EventHandler
                 yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
                 return;
             }
-            if ($headers['content-length'][0] / 1024 / 1024 >= 1000) {
+            if ($headers['content-length'][0] / 1024 / 1024 >= 2000) {
                 yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("large", [$this->formatBytes($headers['content-length'][0])]), 'reply_to_msg_id' => $mid]);
                 return;
             }
@@ -215,7 +215,7 @@ class MrPoKeR extends EventHandler
                 });
             
             
-            
+            yield $this->messages->deleteMessages(['revoke' => true, 'id' => [$id]]);
             
     /*        $url = new \danog\MadelineProto\FileCallback(
                 $message,
@@ -248,9 +248,15 @@ class MrPoKeR extends EventHandler
             if (isset($m[1]) && isset($m[2])) {
                 $combine = array_combine($m[1], $m[2]);
                 if (isset($combine['duration']) && isset($combine['width']) && isset($combine['height'])) {
+                    
+                    $process = new Process("ffmpeg -i $message -ss 00:00:01.000 -vframes 1 $message.png");
+            yield $process->start();
+            $proc = (yield ByteStream\buffer($process->getStdout()));
+            unset($proc,$process);
                     $attribute = ['peer' => $peer,
                         'media' => ['_' => 'inputMediaUploadedDocument',
                             'file' => $url,
+                            'thumb'=>file_exists("$message.png") ? "$message.png" : "https://gettgfile.herokuapp.com/aieegjediaf_chijcjgcfi/400098000119_385156.jpg",
                             'attributes' => [
                                 ['_' => 'documentAttributeVideo',
                                     'round_message' => false,
@@ -264,7 +270,6 @@ class MrPoKeR extends EventHandler
                 }
             }
             yield $this->messages->sendMedia($attribute);
-
         } catch(\Throwable $e) {
             yield $this->report("➲Error :".$e->getMessage()."\n".$e->getLine()."\n".$e->getFile());
         }
