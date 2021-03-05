@@ -215,7 +215,7 @@ class MrPoKeR extends EventHandler
                 });
             yield $this
                             ->messages
-                            ->editMessage(['peer' => $peer, 'message' =>"Uploaded", 'id' => $id, 'parse_mode' => "MarkDown"], ['FloodWaitLimit' => 0])
+                            ->editMessage(['peer' => $peer, 'message' =>"Uploaded", 'id' => $id, 'parse_mode' => "MarkDown"], ['FloodWaitLimit' => 0]);
             
     /*        $url = new \danog\MadelineProto\FileCallback(
                 $message,
