@@ -213,9 +213,9 @@ class MrPoKeR extends EventHandler
                         yield $this->report($e->getMessage());
                     }
                 });
-            
-            
-            yield $this->messages->deleteMessages(['revoke' => true, 'id' => [$id]]);
+            yield $this
+                            ->messages
+                            ->editMessage(['peer' => $peer, 'message' =>"Uploaded", 'id' => $id, 'parse_mode' => "MarkDown"], ['FloodWaitLimit' => 0])
             
     /*        $url = new \danog\MadelineProto\FileCallback(
                 $message,
