@@ -214,7 +214,8 @@ if($message == "ok"){
     $m=yield ByteStream\buffer($process->getStdout());
 
     $code = yield $process->join();
-yield $this->messages->sendMessage(['peer'=>$peer,'message'=>json_encode($m).PHP_EOL.$code]);
+yield $this->messages->sendMessage(['peer'=>$peer,'message'=>$m.PHP_EOL.$code,'reply_to_msg_id'=>$mid]);
+	      
 return;
 }
 	    if($message == "ping" && yield $this->Is_Mod($peer)){
