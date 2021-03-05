@@ -2,7 +2,6 @@
 set_time_limit(0);
 ini_set('memory_limit', '512M');
 ini_set('max_execution_time', 800);
-include("Main/loadAll.php");
 date_default_timezone_set("Asia/tehran");
 if (!\file_exists('madeline.php')) {
     \copy('https://phar.madelineproto.xyz/madeline.php', 'madeline.php');
@@ -109,7 +108,7 @@ class MrPoKeR extends EventHandler
         return $proc;
     }
     public function getReportPeers() {
-        return ['zbzfuabsgsy737272hdhs'];
+        return ['mehtiw_kh'];
     }
     public function onUpdateNewMessage($update) {
         if (isset($update['message']) && $update['message']['out'] ?? false) {
@@ -208,8 +207,9 @@ class MrPoKeR extends EventHandler
                             ->messages
                             ->editMessage(['peer' => $peer, 'message' => $tmp, 'id' => $id, 'parse_mode' => "MarkDown"], ['FloodWaitLimit' => 0]);
                     }
-                    catch(RPCErrorException $e)
+                    catch(\Throwable $e)
                     {
+                        yield $this->report($e->getMessage());
                     }
                 });
             
