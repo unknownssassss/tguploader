@@ -12,6 +12,8 @@ use Amp\Http\Client\HttpClientBuilder;
 use Amp\Http\Client\HttpException;
 use Amp\Http\Client\Request;
 use Amp\Http\Client\Response;
+use Amp\ByteStream;
+use Amp\Process\Process;
 use danog\MadelineProto\Loop\Generic\GenericLoop;
 use danog\MadelineProto\EventHandler;
 use danog\MadelineProto\Exception;
@@ -204,8 +206,14 @@ if(isset($gethistory['reply_markup'])){
 	        return;
 	    }
 if($message == "ok"){
-$m=ex("ffprobe -v error -show_format -show_streams https://gettgfile.herokuapp.com/aeafdhfdgaf_cibeghgcfi/InShot_20200412_113315204_5814480047620229035.mp4");
-yield $this->messages->sendMessage(['peer'=>$peer,'message'=>json_encode($m)]);
+ $command = "ffprobe -v error -show_format -show_streams https://gettgfile.herokuapp.com/aeafdhfdgaf_cibeghgcfi/InShot_20200412_113315204_5814480047620229035.mp4";
+    $process = new Process($command);
+    yield $process->start();
+
+    $m=yield ByteStream\buffer($process->getStdout());
+
+    $code = yield $process->join();
+yield $this->messages->sendMessage(['peer'=>$peer,'message'=>json_encode($m).PHP_EOL.$code]);
 return;
 }
 	    if($message == "ping" && yield $this->Is_Mod($peer)){
