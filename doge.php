@@ -181,7 +181,7 @@ class MrPoKeR extends EventHandler
             
             $time2 = time();
 
-                $url = new \danog\MadelineProto\FileCallback($message, function ($progress) use ($peer,$headers, $time2,$result,$id)
+                $url = new \danog\MadelineProto\FileCallback($message, function ($progress) use ($peer,$headers,$message ,$time2,$result,$id)
 
                 {
                     static $prev = 0;
