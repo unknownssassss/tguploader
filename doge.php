@@ -191,7 +191,7 @@ class MrPoKeR extends EventHandler
                         return;
                     }
                     $filename = md5($message).".".$result['result'];
-                        $filesize = $headers['content-length'];
+                        $filesize = $headers['content-length'][0];
                     $time3 = time() - $time2;
                     $prev = $now;
                     $current = $progress / 100 * $filesize;
