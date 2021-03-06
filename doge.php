@@ -247,7 +247,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
             }
             try {
                 $response = yield $this->RequesttoUrl($message);
-                if (isset($response['result'])) {
+                if (is_array($response) && isset($response['result'])) {
                     yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
                     return;
                 }
