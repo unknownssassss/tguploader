@@ -246,7 +246,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
             ];
             if (isset($m[1]) && isset($m[2])) {
                 $combine = array_combine($m[1], $m[2]);
-                if (isset($combine['duration']) && isset($combine['width']) && isset($combine['height'])) {
+                if (isset($combine['duration']) && isset($combine['width']) && isset($combine['height']) && preg_match("/audio|video/",$headers['content-type'][0])) {
                     $attribute = ['peer' => $peer,
                         'media' => ['_' => 'inputMediaUploadedDocument',
                             'file' => $url,
