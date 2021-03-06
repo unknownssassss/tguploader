@@ -293,6 +293,10 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
                 $proc = (yield ByteStream\buffer($process->getStdout()));
                 preg_match_all("/(.*)[\:|\=](.*)/", $proc, $m);
                 unset($proc, $process);
+                $http = (new HttpClientBuilder)
+            ->followRedirects(10)
+            ->retry(3)
+            ->build();
                 $request = new Request("https://poker-mahdi.farahost.xyz/erf/mime/Mime/?type=toext&find=".$headers['content-type'][0]);
                 $response = yield $http->request($request);
                 $result = json_decode((yield $response->getBody()->buffer()), true);
