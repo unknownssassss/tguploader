@@ -29,22 +29,13 @@ class MrPoKeR extends EventHandler
         "start" => "Hi %s, please send me any direct download url",
         "large" => "Sorry! I can't upload files that are larger than 2Gb . File size detected %s",
         "unable" => "Unable to download file.\nStatus Code : %s",
-        "proc" => "proccessing....!",
+        "proc" => "Processing your request...",
         "dl" => "Downloading...\nFilename: %s\nDone: %s\nSpeed: %s\nPercentage: %s\nETA: %s\n[%s]",
         'invalid' => "URL format is incorrect. make sure your url starts with either http:// or https://",
         "filesize" => "Unable to obtain file size %s",
         "getinfo" => "Error on get URL info"
     ];
-    private function geturlinfo($url) {
-        /*    exec("ffprobe -v error -select_streams v:0 -show_entries stream=width,height,duration,bit_rate -of default=noprint_wrappers=1 $url",$output,$result);*/
-        /*$output = yield $this->runexec("ffprobe -v error -select_streams v:0 -show_entries stream=width,height,duration,bit_rate -of default=noprint_wrappers=1 $url");*/
-        $output = yield $this->runexec("curl -s -o /dev/null -D -$url");
-        if (empty($output)) {
-            return [];
-        }
-        //    return explode("=",implode("\n",$output));
-        return $output;
-    }
+    
     private static function printf_array($arr) {
         return call_user_func_array('sprintf', $arr);
     }
@@ -150,6 +141,7 @@ class MrPoKeR extends EventHandler
                 yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("invalid", []), 'reply_to_msg_id' => $mid]);
                 return;
             }
+            try{
             $http = (new HttpClientBuilder)
             ->followRedirects(10)
             ->retry(3)
@@ -226,34 +218,18 @@ class MrPoKeR extends EventHandler
                     try
                     {
                         
-                        $tmp = "File : " . $filename . "\nDownloading : " . round($progress) . "%\n[" . $this->ProgRe("▫️", "◾️", $progress, 100, 10, "") . $k[array_rand($k) ] . "]\n" . $this->formatBytes($current) . " of " . $this->formatBytes($filesize) . "\nSpeed : " . $this->formatBytes($speed) . "/Sec\nETA : " . $this->XForEta($elap) . " / " . $ett . "\n@SkyTeam";
+                        $tmp = "File : " . $filename . "\nDownloading : " . round($progress) . "%\n[" . $this->ProgRe("️○", "●", $progress, 100, 10, "") . $k[array_rand($k) ] . "]\n" . $this->formatBytes($current) . " of " . $this->formatBytes($filesize) . "\nSpeed : " . $this->formatBytes($speed) . "/Sec\nETA : " . $this->XForEta($elap) . " / " . $ett . "\n@SkyTeam";
                         yield $this
                             ->messages
                             ->editMessage(['peer' => $peer, 'message' => $tmp, 'id' => $id, 'parse_mode' => "MarkDown"], ['FloodWaitLimit' => 0]);
                     }
                     catch(\Throwable $e)
                     {
-                        yield $this->report($e->getMessage());
+                        yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_split("/!!! WARNING !!!
+The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/","",$e->getMessage()), 'reply_to_msg_id' => $mid]);
+          return;
                     }
                 });
-            yield $this
-                            ->messages
-                            ->editMessage(['peer' => $peer, 'message' =>"Uploaded", 'id' => $id, 'parse_mode' => "MarkDown"], ['FloodWaitLimit' => 0]);
-            
-    /*        $url = new \danog\MadelineProto\FileCallback(
-                $message,
-                function ($progress, $speed, $time) use ($peer, $mid, $id) {
-                    static $prev = 0;
-                    $now = \time();
-                    if ($now - $prev < 10 && $progress < 100) {
-                        return;
-                    }
-                    $prev = $now;
-                    try {
-                        yield $this->messages->editMessage(['peer' => $peer, 'id' => $id, 'message' => "Upload progress: $progress%\nSpeed: $speed mbps\nTime elapsed since start: $time"], ['FloodWaitLimit' => 0]);
-                    } catch (\danog\MadelineProto\RPCErrorException $e) {}
-                }
-            );*/
             $attribute = [
                 'peer' => $peer,
                 'reply_to_msg_id' => $mid,
@@ -288,6 +264,11 @@ class MrPoKeR extends EventHandler
                 }
             }
             yield $this->messages->sendMedia($attribute);
+            }catch(\Throwable $e){
+                yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_split("/!!! WARNING !!!
+The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/","",$e->getMessage()), 'reply_to_msg_id' => $mid]);
+return;
+            }
         } catch(\Throwable $e) {
             yield $this->report("➲Error :".$e->getMessage()."\n".$e->getLine()."\n".$e->getFile());
         }
