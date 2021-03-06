@@ -226,7 +226,7 @@ class MrPoKeR extends EventHandler
                     catch(\Throwable $e)
                     {
                         yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
-The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/","",$e->getMessage()).$e->getLine().$e->getFile(), 'reply_to_msg_id' => $mid]);
+The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/","",$e->getMessage()), 'reply_to_msg_id' => $mid]);
           return;
                     }
                 });
@@ -246,7 +246,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
             ];
             if (isset($m[1]) && isset($m[2])) {
                 $combine = array_combine($m[1], $m[2]);
-                if (isset($combine['duration']) && isset($combine['width']) && isset($combine['height']) && preg_match("/audio|video/",$headers['content-type'][0])) {
+                if (isset($combine['duration']) && isset($combine['width']) && isset($combine['height']) && !preg_match("/image/",$headers['content-type'][0])) {
                     $attribute = ['peer' => $peer,
                         'media' => ['_' => 'inputMediaUploadedDocument',
                             'file' => $url,
@@ -266,7 +266,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
             yield $this->messages->sendMedia($attribute);
             }catch(\Throwable $e){
                 yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
-The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/","",$e->getMessage()).$e->getLine().$e->getFile(), 'reply_to_msg_id' => $mid]);
+The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/","",$e->getMessage()), 'reply_to_msg_id' => $mid]);
 return;
             }
         } catch(\Throwable $e) {
