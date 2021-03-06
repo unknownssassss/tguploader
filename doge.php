@@ -26,7 +26,7 @@ use Amp\Http\Client\Response;
 class MrPoKeR extends EventHandler
 {
     private static $array = [
-        "start" => "Hi %s, please send me any direct download url",
+        "start" => "Hi, please send me any direct download url",
         "large" => "Sorry! I can't upload files that are larger than 2Gb . File size detected %s",
         "unable" => "Unable to download file.\nStatus Code : %s",
         "proc" => "Processing your request...",
@@ -131,7 +131,7 @@ class MrPoKeR extends EventHandler
                           return;
      }
             if ($message == "/start") {
-                yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("start", [$from_id]), 'reply_to_msg_id' => $mid]);
+                yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("start", []), 'reply_to_msg_id' => $mid]);
                 return;
             }
             if ($message == "reload") {
@@ -241,7 +241,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
                             'file_name' => md5($message).".".$result['result']]
                     ]
                 ],
-                'message' => $message,
+                'message' => "@skyteam",
                 'parse_mode' => 'Markdown'
             ];
             if (isset($m[1]) && isset($m[2])) {
@@ -259,7 +259,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
                                     'w' => $combine['width'],
                                     'h' => $combine['height']]
                             ]],
-                        'message' => $message,
+                        'message' => "@skyteam",
                         'reply_to_msg_id' => $mid];
                 }
             }
