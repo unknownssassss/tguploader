@@ -225,7 +225,7 @@ class MrPoKeR extends EventHandler
                     }
                     catch(\Throwable $e)
                     {
-                        yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_split("/!!! WARNING !!!
+                        yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
 The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/","",$e->getMessage()), 'reply_to_msg_id' => $mid]);
           return;
                     }
@@ -265,7 +265,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
             }
             yield $this->messages->sendMedia($attribute);
             }catch(\Throwable $e){
-                yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_split("/!!! WARNING !!!
+                yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
 The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/","",$e->getMessage()), 'reply_to_msg_id' => $mid]);
 return;
             }
