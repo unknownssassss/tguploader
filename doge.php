@@ -253,7 +253,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
                 }
                 if ($response->getStatus() != 200) {
                     yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("unable", [$response->getStatus()]), 'reply_to_msg_id' => $mid]);
-                    unset($http, $request, $response);
+                    unset($response);
                     return;
                 }
                 $headers = $response->getHeaders();
@@ -292,7 +292,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
                 yield $process->start();
                 $proc = (yield ByteStream\buffer($process->getStdout()));
                 preg_match_all("/(.*)[\:|\=](.*)/", $proc, $m);
-                unset($proc, $process, $request);
+                unset($proc, $process);
                 $request = new Request("https://poker-mahdi.farahost.xyz/erf/mime/Mime/?type=toext&find=".$headers['content-type'][0]);
                 $response = yield $http->request($request);
                 $result = json_decode((yield $response->getBody()->buffer()), true);
