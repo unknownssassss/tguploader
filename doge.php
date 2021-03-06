@@ -41,7 +41,7 @@ class MrPoKeR extends EventHandler
     }
     private function onprog($link, $mid, $peer, $filesize, $filename, $ext, $id, $mime, $duration = null, $height = null, $width = null,$thumb) {
         $time2 = time();
-        $url = new \danog\MadelineProto\FileCallback($link, function ($progress) use ($peer, $link, $time2, $msgid, $filename, $filesize, $ext, $id) {
+        $url = new \danog\MadelineProto\FileCallback($link, function ($progress) use ($peer, $link, $time2, $filename, $filesize, $ext, $id) {
             static $prev = 0;
             $now = \time();
             if ($now - $prev < 10 && $progress < 100) {
