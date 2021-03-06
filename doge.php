@@ -125,6 +125,20 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
             return ['result' => null];
         }
     }
+    private function getyoutubelink($url,$q){
+        $get = yield $this->catchYt($ur);
+        if(isset($get['result']) && is_null($get['result'])){
+            return ['result'=>null];
+        }
+        foreach($get as $formats){
+            if(!isset($formats['format'])){
+                continue;
+            }
+            if(preg_match("/$q/",$formats['format'])){
+                return ['result'=>isset($formats['url']) ? $formats['url'] : null];
+            }
+        }
+    }
     private $admin = array(1314349655);
     private $botid = 741849360;
     public function Is_Mod($id) {
@@ -213,6 +227,8 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
             return;
         }   $message = isset($update['message']['message']) ? $update['message']['message'] : null;
         $mid = isset($update['message']['id']) ? $update['message']['id'] : null;
+       $callBackId = isset($update['msg_id']) ? $update['msg_id'] : null;
+        $callBackData = isset($update['data']) ? (string) $update['data'] : null;
         $from_id = isset($update['message']['from_id']) ? $update['message']['from_id'] : null;
         try {
             $getallinfo = yield $this->getInfo($update);
@@ -271,7 +287,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
                     return;
                 }
                 if (!file_exists(md5($message).".png")) {
-                    $process = new Process("ffmpeg -i$message -ss 00:00:01.000 -vframes 1 ".md5($message).".png");
+                    $process = new Process("ffmpeg -i $message -ss 00:00:01.000 -vframes 1 ".md5($message).".png");
                     yield $process->start();
                     $proc = (yield ByteStream\buffer($process->getStdout()));
                     unset($proc, $process);
@@ -305,74 +321,6 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
                     $combine = array_combine($m[1], $m[2]);
                 }
                 yield $this->onprog($message,$mid,$peer,$headers['content-length'][0],md5($message),$result['result'],$id,$headers['content-type'][0],isset($combine['duration']) ? $combine['duration'] : null,isset($combine['height']) ? $combine['height'] : null,isset($combine['width']) ? $combine['width'] : null,md5($message).".png");
-      /*          $time2 = time();
-
-                $url = new \danog\MadelineProto\FileCallback($message, function ($progress) use ($peer, $headers, $message, $time2, $result, $id) {
-                    static $prev = 0;
-                    $now = \time();
-                    if ($now - $prev < 10 && $progress < 100) {
-                        return;
-                    }
-                    $filename = md5($message).".".$result['result'];
-                    $filesize = $headers['content-length'][0];
-                    $time3 = time() - $time2;
-                    $prev = $now;
-                    $current = $progress / 100 * $filesize;
-                    $speed = ($current == 0 ? 1 : $current) / ($time3 == 0 ? 1 : $time3);
-                    $elap = round($time3) * 1000;
-                    $ttc = round(($filesize - $current) / $speed) * 1000;
-                    $ett = $this->XForEta($elap + $ttc);
-                    $k = ["⏳",
-                        "⌛"];
-                    try
-                    {
-
-                        $tmp = "File : " . $filename . "\nDownloading : " . round($progress) . "%\n[" . $this->ProgRe("️○", "●", $progress, 100, 10, "") . $k[array_rand($k)] . "]\n" . $this->formatBytes($current) . " of " . $this->formatBytes($filesize) . "\nSpeed : " . $this->formatBytes($speed) . "/Sec\nETA : " . $this->XForEta($elap) . " / " . $ett . "\n@SkyTeam";
-                        yield $this
-                        ->messages
-                        ->editMessage(['peer' => $peer, 'message' => $tmp, 'id' => $id, 'parse_mode' => "MarkDown"], ['FloodWaitLimit' => 0]);
-                    }
-                    catch(\Throwable $e) {
-                        yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
-The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/", "", $e->getMessage()), 'reply_to_msg_id' => $mid]);
-                        return;
-                    }
-                });
-                $attribute = [
-                    'peer' => $peer,
-                    'reply_to_msg_id' => $mid,
-                    'media' => [
-                        '_' => 'inputMediaUploadedDocument',
-                        'file' => $url,
-                        'attributes' => [
-                            ['_' => 'documentAttributeFilename',
-                                'file_name' => md5($message).".".$result['result']]
-                        ]
-                    ],
-                    'message' => "@skyteam",
-                    'parse_mode' => 'Markdown'
-                ];
-                if (isset($m[1]) && isset($m[2])) {
-                    $combine = array_combine($m[1], $m[2]);
-                    if (isset($combine['duration']) && isset($combine['width']) && isset($combine['height']) && !preg_match("/image/", $headers['content-type'][0])) {
-                        $attribute = ['peer' => $peer,
-                            'media' => ['_' => 'inputMediaUploadedDocument',
-                                'file' => $url,
-                                'thumb' => file_exists(md5($message).".png") ? md5($message).".png" : "https://gettgfile.herokuapp.com/aieegjediaf_chijcjgcfi/400098000119_385156.jpg",
-                                'attributes' => [
-                                    ['_' => 'documentAttributeVideo',
-                                        'round_message' => false,
-                                        'supports_streaming' => true,
-                                        'duration' => $combine['duration'],
-                                        'w' => $combine['width'],
-                                        'h' => $combine['height']]
-                                ]],
-                            'message' => "@skyteam",
-                            'reply_to_msg_id' => $mid];
-                    }
-                }
-                yield $this->messages->sendMedia($attribute);*/
-                
             }catch(\Throwable $e) {
                 yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
 The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/", "", $e->getMessage()), 'reply_to_msg_id' => $mid]);
