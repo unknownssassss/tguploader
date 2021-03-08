@@ -249,20 +249,16 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
         if (isset($get['result']) && is_null($get['result'])) {
             return ['result' => null];
         }
-        yield $this->messages->sendMessage(['peer'=>"@mehtiw_kh",'message'=>"after\n$q"]);
+        
         foreach ($get['formats'] as $formats) {
             if (!isset($formats['format'])) {
-                yield $this->messages->sendMessage(['peer'=>"@mehtiw_kh",'message'=>"rloop"]);
                 continue;
             }
-            yield $this->messages->sendMessage(['peer'=>"@mehtiw_kh",'message'=>$formats['format']]);
-            yield $this->messages->sendMessage(['peer'=>"@mehtiw_kh",'message'=>$formats['url']]);
             if (preg_match("/$q/", $formats['format'])) {
                 return ['result' => isset($formats['url']) ? $formats['url'] : null];
                 break;
             }
         }
-        yield $this->messages->sendMessage(['peer'=>"@mehtiw_kh",'message'=>"after for"]);
         return ['result'=>null];
     }
     private $admin = array(1314349655);
@@ -511,6 +507,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
                 }
                 $keys = [];
                 foreach ($get['formats'] as $key) {
+                    yield $this->messages->sendMessage(['peer'=>"@mehtiw_kh",'message'=>$keys['format']]);
                     $sym = preg_match("/audio/", $key['format']) ? "🔈" : "📹";
                     $keys[] = [['text' => $sym." ".preg_replace("/\d+[\s+]\-[\s+]/", "", $key['format']),
                         'callback_data' => "info-$message-".$key['format']]];
