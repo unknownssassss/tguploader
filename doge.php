@@ -193,8 +193,7 @@ class MrPoKeR extends EventHandler
                 'reply_to_msg_id' => $mid,
                 'media' => [
                     '_' => 'inputMediaUploadedDocument',
-                    'file' => $url, 'thumb' => file_exists($thumb) or filter_var($thumb,
-                        FILTER_VALIDATE_URL) ? $thumb : "https://gettgfile.herokuapp.com/aieegjediaf_chijcjgcfi/400098000119_385156.jpg",
+                    'file' => $url,
                     'attributes' => [
                         ['_' => 'documentAttributeFilename',
                             'file_name' => $filename.".".$ext]
