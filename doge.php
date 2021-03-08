@@ -225,7 +225,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
             if (!isset($get['info']['formats'])) {
                 return ['result' => null];
             }
-            return count($get['info']['formats']) == 0 ? ['result' => null] : ['result' => $get['info']];
+            return count($get['info']['formats']) == 0 ? ['result' => null] : $get['info'];
         }catch(\Throwable $e) {
             return ['result' => null];
         }
