@@ -249,7 +249,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
         if (isset($get['result']) && is_null($get['result'])) {
             return ['result' => null];
         }
-        foreach ($get as $formats) {
+        foreach ($get['formats'] as $formats) {
             if (!isset($formats['format'])) {
                 continue;
             }
