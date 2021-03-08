@@ -512,7 +512,7 @@ class MrPoKeR extends EventHandler
             if (time() <= $this->botusers[$from_id]['time'] && !yield $this->is_mod($from_id)) {
                 yield $this->messages->sendMessage(['peer'=>$peer,'message'=> "Sorry Dude am not only for YOU  $$
 01 Request per 2 Minutes..
-Enjoy after ".$this->XForEta($this->botusers[$from_id]['time']- time()),'reply_to_msg_id'=>$mid]);
+Enjoy after ".$this->XForEta(($this->botusers[$from_id]['time'] - time()) * 1000),'reply_to_msg_id'=>$mid]);
                 return;
             }
             $this->botusers[$from_id]['time'] = time() + 120;
