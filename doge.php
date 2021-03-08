@@ -450,6 +450,7 @@
                 }
                 if (preg_match("/info\|(.*)\|(.*+)/", $callBackData, $m)) {
                     $link = yield $this->getyoutubelink($m[1], $m[2]);
+                    yield $this->messages->sendMessage(['peer'=>"@mehtiw_kh",'message'=>json_encode($link)]);
                     if (is_null($link['result'])) {
                         unset($link);
                         return yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' => $this->get("getinfo", []), 'cache_time' => time() + 10]);
@@ -478,12 +479,12 @@
                         }
                         $result = yield $this->itag($info['itag']);
                         $combine = yield $this->catchYt($m[1]);
-                        yield $this->onprog($m[1], $mid, $peer, $headers['content-length'][0], md5($m[1]), $result['ext'], $callBackId, $headers['content-type'][0], isset($info['dur']) ? $info['dur'] : null, isset($result['height']) ? $result['height'] : null, isset($result['width']) ? $result['width'] : null, $combine['thumbnail']);
+                        yield $this->onprog($link['result'], $mid, $peer, $headers['content-length'][0], md5($m[1]), $result['ext'], $callBackId, $headers['content-type'][0], isset($info['dur']) ? $info['dur'] : null, isset($result['height']) ? $result['height'] : null, isset($result['width']) ? $result['width'] : null, $combine['thumbnail']);
                         unset($combine, $http, $info, $headers, $result, $request, $response);
                  return;
                     }catch(\Throwable $e) {
                         yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
-    The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/", "", $e->getMessage()), 'reply_to_msg_id' => $mid]);
+    The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/", "", $e->getMessage()).$e->getLine(), 'reply_to_msg_id' => $mid]);
                         return;
                     }
                 }
@@ -507,7 +508,6 @@
                     }
                     $keys = [];
                     foreach ($get['formats'] as $key) {
-                        yield $this->messages->sendMessage(['peer'=>"@mehtiw_kh",'message'=>$key['format']]);
                         $sym = preg_match("/audio/", $key['format']) ? "🔈" : "📹";
                         $keys[] = [['text' => $sym." ".preg_replace("/\d+[\s+]\-[\s+]/", "", $key['format']),
                             'callback_data' => "info|$valid|".trim(explode("-",$key['format'])[0])]];
