@@ -177,13 +177,13 @@ class MrPoKeR extends EventHandler
                 "⌛"];
             try
             {
-                $tmp = "File : " . $filename . ".$ext\nDownloading : " . round($progress) . "%\n[" . $this->ProgRe("️○", "●", $progress, 100, 10, "") . $k[array_rand($k)] . "]\n" . $this->formatBytes($current) . " of " . $this->formatBytes($filesize) . "\nSpeed : " . $this->formatBytes($speed) . "/Sec\nETA : " . $this->XForEta($ett-$elap) . "\n@SkyTeam";
+                $tmp = "File : " . $filename . ".$ext\nDownloading : " . round($progress) . "%\n[" . $this->ProgRe("️○", "●", $progress, 100, 10, "") . $k[array_rand($k)] . "]\n" . $this->formatBytes($current) . " of " . $this->formatBytes($filesize) . "\nSpeed : " . $this->formatBytes($speed) . "/Sec\nETA : " . $this->XForEta($elap)." / " . "$ett\n@SkyTeam";
                 yield $this
                 ->messages
                 ->editMessage(['peer' => $peer, 'message' => $tmp, 'id' => $id, 'parse_mode' => "MarkDown"], ['FloodWaitLimit' => 0]);
             }catch(\Throwable $e) {
                 yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
-    The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/", "", $e->getMessage()), 'reply_to_msg_id' => $mid]);
+    The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/", "", $e->getMessage()), 'reply_to_msg_id' => $id]);
                 return;
             }
         });
