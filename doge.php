@@ -351,7 +351,7 @@ class MrPoKeR extends EventHandler
         $minutes = round($minutes % 60);
         $days = round($hours / 24);
         $hours = round($hours % 24);
-        $tmp = (($days ? $days . " Day | " : "") . "" . ($hours ? $hours . " H " : "") . "" . ($minutes ? $minutes . " Min " : "") . "" . ($seconds ? $seconds . " Sec " : "") . "" . ($mils ? $mils . " Ms " : ""));
+        $tmp = (($days ? $days . " Day " : "") . "" . ($hours ? $hours . " H " : "") . "" . ($minutes ? $minutes . " Min " : "") . "" . ($seconds ? $seconds . " Sec " : "") . "" . ($mils ? $mils . " Ms " : ""));
         return $tmp;
     }
     private function runexec($cmd) {
@@ -512,7 +512,7 @@ class MrPoKeR extends EventHandler
             if (time() <= $this->botusers[$from_id]['time'] && !yield $this->is_mod($from_id)) {
                 yield $this->messages->sendMessage(['peer'=>$peer,'message'=> "Sorry Dude am not only for YOU  $$
 01 Request per 2 Minutes..
-Enjoy after ".$this->XForEta($this->botusers[$from_id]['time']),'reply_to_msg_id'=>$mid]);
+Enjoy after ".$this->XForEta($this->botusers[$from_id]['time']- time()),'reply_to_msg_id'=>$mid]);
                 return;
             }
             $this->botusers[$from_id]['time'] = time() + 120;
