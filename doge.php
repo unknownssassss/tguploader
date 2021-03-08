@@ -458,22 +458,26 @@ class MrPoKeR extends EventHandler
                 try {
                     $response = yield $this->RequesttoUrl($link['result']);
                     if (is_array($response) && isset($response['result'])) {
-                        yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
+                          yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' =>  $this->get("getinfo", []), 'cache_time' => time() + 10]);
                         return;
                     }
                     if ($response->getStatus() != 200) {
-                        yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("unable", [$response->getStatus()]), 'reply_to_msg_id' => $mid]);
+                        yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' =>  $this->get("unable", [$response->getStatus()]), 'cache_time' => time() + 10]);
                         unset($response);
                         return;
                     }
                     $headers = $response->getHeaders();
                     if (!isset($headers['content-length'][0])) {
-                        yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("filesize", [$message]), 'reply_to_msg_id' => $mid]);
+                        yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' =>  $this->get("filesize", ["https://youtu.be/".$m[1]]), 'cache_time' => time() + 10]);
                         unset($headers);
                         return;
                     }
                     if (!isset($headers['content-type'][0])) {
-                        yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
+                        yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' =>  $this->get("getinfo", []), 'cache_time' => time() + 10]);
+                        return;
+                    }
+                    if($hraders['content-length'][0] / 1024 / 1024 >= 2000){
+                        yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' =>  $this->get("large", [$this->formatBytes($headers['content-length'][0])]), 'cache_time' => time() + 10]);
                         return;
                     }
                     if (!file_exists(md5($m[1]).".png")) {
@@ -503,6 +507,9 @@ class MrPoKeR extends EventHandler
                 $this->botusers[$from_id]['time'] = "";
             }
             if (time() <= $this->botusers[$from_id]['time'] && !yield $this->is_mod($from_id)) {
+                yield $this->messages->sendMessage(['peer'=>$peer,'message'=> "Sorry Dude am not only for YOU  $$
+01 Request per 2 Minutes..
+Enjoy after ".$this->XForEta($this->botusers[$from_id]['time']),'reply_to_msg_id'=>$mid]);
                 return;
             }
             $this->botusers[$from_id]['time'] = time() + 120;
@@ -515,8 +522,10 @@ class MrPoKeR extends EventHandler
                 }
                 $keys = [];
                 foreach ($get['formats'] as $key) {
+                    $response = yield $this->RequesttoUrl($key['url']);
+                    $headers = yield $response->getHeaders();
                     $sym = preg_match("/audio/", $key['format']) ? "🔈" : "📹";
-                    $keys[] = [['text' => $sym." ".$key['format'],
+                    $keys[] = [['text' => $this->formatBytes($headers['content-length'][0] ?: 0).$sym." ".$key['format'],
                         'callback_data' => "info|$valid|".trim(explode("-", $key['format'])[0])]];
                 }
                 yield $this->messages->sendMessage(['peer' => $peer, 'message' => isset($get['title']) ? $get['title'] : $message, 'reply_to_msg_id' => $mid, 'reply_markup' => ['inline_keyboard' => $keys]]); unset($keys, $get);
