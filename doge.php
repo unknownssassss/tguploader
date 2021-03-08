@@ -448,7 +448,8 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
             if ($message == "reload") {
                 yield $this->restart();
             }
-            if (preg_match("/info\-(.*)\-(.*)/", $callBackData, $m)) {
+            if (preg_match("/info\|(.*)\|(.*)/", $callBackData, $m)) {
+                yield $this->messages->setBotCallbackAnswer(['alert' => false, 'query_id' => $update['query_id'], 'message' =>$m[1]."+".$m[2], 'cache_time' => time() + 10]);
                 $link = yield $this->getyoutubelink($m[1], $m[2]);
                 if (is_null($link['result'])) {
                     unset($link);
@@ -510,7 +511,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
                     yield $this->messages->sendMessage(['peer'=>"@mehtiw_kh",'message'=>$key['format']]);
                     $sym = preg_match("/audio/", $key['format']) ? "🔈" : "📹";
                     $keys[] = [['text' => $sym." ".preg_replace("/\d+[\s+]\-[\s+]/", "", $key['format']),
-                        'callback_data' => "info-$message-".$key['format']]];
+                        'callback_data' => "info|$message|".$key['format']]];
                 }
                 yield $this->messages->sendMessage(['peer' => $peer, 'message' => isset($get['title']) ? $get['title'] : $message, 'reply_to_msg_id' => $mid, 'reply_markup' => ['inline_keyboard' => $keys]]); unset($keys, $get);
                 return;
