@@ -476,7 +476,7 @@ class MrPoKeR extends EventHandler
                         yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' =>  $this->get("getinfo", []), 'cache_time' => time() + 10]);
                         return;
                     }
-                    if($hraders['content-length'][0] / 1024 / 1024 >= 2000){
+                    if($headers['content-length'][0] / 1024 / 1024 >= 2000){
                         yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' =>  $this->get("large", [$this->formatBytes($headers['content-length'][0])]), 'cache_time' => time() + 10]);
                         return;
                     }
