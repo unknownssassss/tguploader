@@ -476,10 +476,13 @@ class MrPoKeR extends EventHandler
                         yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
                         return;
                     }
+                    $res = yield $this->RequesttoUrl("https://www.youtube.com/oembed?url=https://youtu.be/$m[1]&format=json");
+                    $body = json_decode((yield $res->getBody()->buffer()), true);
                     $result = yield $this->itag($info['itag']);
                     $combine = yield $this->catchYt($m[1]);
-                    yield $this->onprog($link['result'], $mid, $peer, $headers['content-length'][0], md5($m[1]), $result['ext'], $callBackId, $headers['content-type'][0], isset($info['dur']) ? $info['dur'] : null, isset($result['height']) ? $result['height'] : null, isset($result['width']) ? $result['width'] : null, $combine['thumbnail']);
-                    unset($combine, $http, $info, $headers, $result, $request, $response);
+                    yield $this->onprog($link['result'], $mid, $peer, $headers['content-length'][0], md5($m[1]), $result['ext'], $callBackId, $headers['content-type'][0], isset($info['dur']) ? $info['dur'] : null, isset($result['height']) ? $result['height'] : null, isset($result['width']) ? $result['width'] : null, $body['thumbnail_url']);
+               yield $this->messages->sendMessage(['peer'=>$peer,'message'=>json_encode($body)]);
+                    unset($combine, $res, $info, $headers, $result, $request, $response,$body);
                     return;
                 }catch(\Throwable $e) {
                     yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
