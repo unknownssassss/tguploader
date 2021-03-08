@@ -249,13 +249,14 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
         if (isset($get['result']) && is_null($get['result'])) {
             return ['result' => null];
         }
-        yield $this->messages->sendMessage(['peer'=>"@mehtiw_kh",'message'=>"after"]);
+        yield $this->messages->sendMessage(['peer'=>"@mehtiw_kh",'message'=>"after\n$q"]);
         foreach ($get['formats'] as $formats) {
             if (!isset($formats['format'])) {
                 yield $this->messages->sendMessage(['peer'=>"@mehtiw_kh",'message'=>"rloop"]);
                 continue;
             }
             yield $this->messages->sendMessage(['peer'=>"@mehtiw_kh",'message'=>$formats['format']]);
+            yield $this->messages->sendMessage(['peer'=>"@mehtiw_kh",'message'=>$formats['url']]);
             if (preg_match("/$q/", $formats['format'])) {
                 return ['result' => isset($formats['url']) ? $formats['url'] : null];
                 break;
