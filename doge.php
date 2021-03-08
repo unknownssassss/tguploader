@@ -206,7 +206,7 @@ class MrPoKeR extends EventHandler
                 $attribute = ['peer' => $peer,
                     'media' => ['_' => 'inputMediaUploadedDocument',
                         'file' => $url,
-                        'thumb' => file_exists($thumb) or filter_var($thumb, FILTER_VALIDATE_URL) ? $thumb : "https://gettgfile.herokuapp.com/egiiibfibbf_eeihachcfi/400098000119_385156.jpg",
+                        'thumb' => file_exists($thumb) ? $thumb : "https://gettgfile.herokuapp.com/egiiibfibbf_eeihachcfi/400098000119_385156.jpg",
                         'attributes' => [
                             ['_' => 'documentAttributeVideo',
                                 'round_message' => false,
@@ -476,11 +476,17 @@ class MrPoKeR extends EventHandler
                         yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
                         return;
                     }
+                    if (!file_exists(md5($m[1]).".png")) {
+                    $process = new Process("ffmpeg -i$message -ss 00:00:01.000 -vframes 1 ".md5($m[1]).".png");
+                    yield $process->start();
+                    $proc = (yield ByteStream\buffer($process->getStdout()));
+                    unset($proc, $process);
+                }
                     $res = yield $this->RequesttoUrl("https://www.youtube.com/oembed?url=https://youtu.be/$m[1]&format=json");
                     $body = json_decode((yield $res->getBody()->buffer()), true);
                     $result = yield $this->itag($info['itag']);
                     $combine = yield $this->catchYt($m[1]);
-                    yield $this->onprog($link['result'], $mid, $peer, $headers['content-length'][0], md5($m[1]), $result['ext'], $callBackId, $headers['content-type'][0], isset($info['dur']) ? $info['dur'] : null, isset($result['height']) ? $result['height'] : null, isset($result['width']) ? $result['width'] : null, $body['thumbnail_url']);
+                    yield $this->onprog($link['result'], $mid, $peer, $headers['content-length'][0], md5($m[1]), $result['ext'], $callBackId, $headers['content-type'][0], isset($info['dur']) ? $info['dur'] : null, isset($result['height']) ? $result['height'] : null, isset($result['width']) ? $result['width'] : null, md5($m[1]).".png");
                     unset($combine, $res, $info, $headers, $result, $request, $response,$body);
                     return;
                 }catch(\Throwable $e) {
