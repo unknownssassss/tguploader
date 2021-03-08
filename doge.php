@@ -255,8 +255,10 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
             }
             if (preg_match("/$q/", $formats['format'])) {
                 return ['result' => isset($formats['url']) ? $formats['url'] : null];
+                break;
             }
         }
+        return ['result'=>null];
     }
     private $admin = array(1314349655);
     private $botid = 741849360;
@@ -446,7 +448,6 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
                 yield $this->restart();
             }
             if (preg_match("/info\-(.*)\-(.*)/", $callBackData, $m)) {
-                yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' => "wait", 'cache_time' => time() + 10]);
                 $link = yield $this->getyoutubelink($m[1], $m[2]);
                 if (is_null($link['result'])) {
                     unset($link);
