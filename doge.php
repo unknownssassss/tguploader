@@ -484,12 +484,17 @@ class MrPoKeR extends EventHandler
                     $proc = (yield ByteStream\buffer($process->getStdout()));
                     unset($proc, $process);
                 }
-                    $res = yield $this->RequesttoUrl("https://www.youtube.com/oembed?url=https://youtu.be/$m[1]&format=json");
-                    $body = json_decode((yield $res->getBody()->buffer()), true);
+                    $http = (new HttpClientBuilder)
+                ->followRedirects(10)
+                ->retry(3)
+                ->build();
+                $request = new Request("https://poker-mahdi.farahost.xyz/erf/mime/Mime/?type=toext&find=".$headers['content-type'][0]);
+                $response = yield $http->request($request);
+                $body = json_decode((yield $response->getBody()->buffer()), true);
                     $result = yield $this->itag($info['itag']);
                     $combine = yield $this->catchYt($m[1]);
-                    yield $this->onprog($link['result'], $mid, $peer, $headers['content-length'][0], md5($m[1]), $result['ext'], $callBackId, $headers['content-type'][0], isset($info['dur']) ? $info['dur'] : null, isset($result['height']) ? $result['height'] : null, isset($result['width']) ? $result['width'] : null, md5($m[1]).".png");
-                    unset($combine, $res, $info, $headers, $result, $request, $response,$body);
+                    yield $this->onprog($link['result'], $mid, $peer, $headers['content-length'][0], md5($m[1]), $body['result'], $callBackId, $headers['content-type'][0], isset($info['dur']) ? $info['dur'] : null, isset($result['height']) ? $result['height'] : null, isset($result['width']) ? $result['width'] : null, md5($m[1]).".png");
+                    unset($combine, $info, $headers, $result, $request, $response,$body);
                     return;
                 }catch(\Throwable $e) {
                     yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
