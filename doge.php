@@ -41,20 +41,20 @@ class MrPoKeR extends EventHandler
     private static function printf_array($arr) {
         return call_user_func_array('sprintf', $arr);
     }
-    public function onUpdateBotInlineQuery($update){
+    public function onUpdateBotInlineQuery($update) {
 
         yield $this->onUpdateNewMessage($update);
 
-        }
-     public function onUpdateBotInlineSend($update){
+    }
+    public function onUpdateBotInlineSend($update) {
         yield $this->onUpdateNewMessage($update);
-        }
-      public function onUpdateBotCallbackQuery($update){
+    }
+    public function onUpdateBotCallbackQuery($update) {
         yield $this->onUpdateNewMessage($update);
-        }
-       public function onUpdateInlineBotCallbackQuery($update){
+    }
+    public function onUpdateInlineBotCallbackQuery($update) {
         yield $this->onUpdateNewMessage($update);
-        }
+    }
     private function itag($itag) {
         $_formats = array(
             '5' => array('ext' => 'flv', 'width' => 400, 'height' => 240, 'acodec' => 'mp3', 'abr' => 64, 'vcodec' => 'h263'),
@@ -374,7 +374,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
         if (isset($update['message']) && $update['message']['out'] ?? false) {
             return;
         }
-        if ($update['message']['date'] < time() - 60) {
+        if (isset($update['message']['date']) && $update['message']['date'] < time() - 60) {
             return;
         }   $message = isset($update['message']['message']) ? $update['message']['message'] : null;
         $mid = isset($update['message']['id']) ? $update['message']['id'] : null;
