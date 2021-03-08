@@ -41,6 +41,20 @@ class MrPoKeR extends EventHandler
     private static function printf_array($arr) {
         return call_user_func_array('sprintf', $arr);
     }
+    public function onUpdateBotInlineQuery($update){
+
+        yield $this->onUpdateNewMessage($update);
+
+        }
+     public function onUpdateBotInlineSend($update){
+        yield $this->onUpdateNewMessage($update);
+        }
+      public function onUpdateBotCallbackQuery($update){
+        yield $this->onUpdateNewMessage($update);
+        }
+       public function onUpdateInlineBotCallbackQuery($update){
+        yield $this->onUpdateNewMessage($update);
+        }
     private function itag($itag) {
         $_formats = array(
             '5' => array('ext' => 'flv', 'width' => 400, 'height' => 240, 'acodec' => 'mp3', 'abr' => 64, 'vcodec' => 'h263'),
@@ -459,6 +473,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
                 return;
             }
             if (preg_match("/info\-(.*)\-(.*)/", $callBackData, $m)) {
+                yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' => "wait", 'cache_time' => time() + 10]);
                 $link = yield $this->getyoutubelink($m[1], $m[2]);
                 if (is_null($link['result'])) {
                     unset($link);
