@@ -430,7 +430,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
                 foreach ($users as $id) {
                     yield $this->sleep(1.1);
                     try {
-                        yield $this->messages->sendMessage(['peer' => $id, 'message' => $m[1]]);
+                        yield $this->messages->sendMessage(['peer' => $id, 'message' => $m[2]]);
                     }catch(\Throwable $e) {
                         continue;
                     }
@@ -444,33 +444,6 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
             }
             if ($message == "reload") {
                 yield $this->restart();
-            }
-            if (!filter_var($message, FILTER_VALIDATE_URL)) {
-                yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("invalid", []), 'reply_to_msg_id' => $mid]);
-                return;
-            }
-            if (!isset($this->botusers[$from_id]['time'])) {
-                $this->botusers[$from_id]['time'] = "";
-            }
-            if (time() <= $this->botusers[$from_id]['time'] && !yield $this->is_mod($from_id)) {
-                return;
-            }
-            $this->botusers[$from_id]['time'] = time() + 120;
-            if ($valid = $this->ValidYoutube($message)) {
-
-                $get = yield $this->catchYt($message);
-                if (isset($get['result']) && is_null($get['result'])) {
-                    yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
-                    return;
-                }
-                $keys = [];
-                foreach ($get['formats'] as $key) {
-                    $sym = preg_match("/audio/", $key['format']) ? "🔈" : "📹";
-                    $keys[] = [['text' => $sym." ".preg_replace("/\d+[\s+]\-[\s+]/", "", $key['format']),
-                        'callback_data' => "info-$message-".$key['format']]];
-                }
-                yield $this->messages->sendMessage(['peer' => $peer, 'message' => isset($get['title']) ? $get['title'] : $message, 'reply_to_msg_id' => $mid, 'reply_markup' => ['inline_keyboard' => $keys]]); unset($keys, $get);
-                return;
             }
             if (preg_match("/info\-(.*)\-(.*)/", $callBackData, $m)) {
                 yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' => "wait", 'cache_time' => time() + 10]);
@@ -505,13 +478,40 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
                     $combine = yield $this->catchYt($m[1]);
                     yield $this->onprog($m[1], $mid, $peer, $headers['content-length'][0], md5($m[1]), $result['ext'], $callBackId, $headers['content-type'][0], isset($info['dur']) ? $info['dur'] : null, isset($result['height']) ? $result['height'] : null, isset($result['width']) ? $result['width'] : null, $combine['thumbnail']);
                     unset($combine, $http, $info, $headers, $result, $request, $response);
+             return;
                 }catch(\Throwable $e) {
                     yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
 The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/", "", $e->getMessage()), 'reply_to_msg_id' => $mid]);
                     return;
                 }
             }
+            if (!filter_var($message, FILTER_VALIDATE_URL)) {
+                yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("invalid", []), 'reply_to_msg_id' => $mid]);
+                return;
+            }
+            if (!isset($this->botusers[$from_id]['time'])) {
+                $this->botusers[$from_id]['time'] = "";
+            }
+            if (time() <= $this->botusers[$from_id]['time'] && !yield $this->is_mod($from_id)) {
+                return;
+            }
+            $this->botusers[$from_id]['time'] = time() + 120;
+            if ($valid = $this->ValidYoutube($message)) {
 
+                $get = yield $this->catchYt($message);
+                if (isset($get['result']) && is_null($get['result'])) {
+                    yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
+                    return;
+                }
+                $keys = [];
+                foreach ($get['formats'] as $key) {
+                    $sym = preg_match("/audio/", $key['format']) ? "🔈" : "📹";
+                    $keys[] = [['text' => $sym." ".preg_replace("/\d+[\s+]\-[\s+]/", "", $key['format']),
+                        'callback_data' => "info-$message-".$key['format']]];
+                }
+                yield $this->messages->sendMessage(['peer' => $peer, 'message' => isset($get['title']) ? $get['title'] : $message, 'reply_to_msg_id' => $mid, 'reply_markup' => ['inline_keyboard' => $keys]]); unset($keys, $get);
+                return;
+            }
             try {
                 $response = yield $this->RequesttoUrl($message);
                 if (is_array($response) && isset($response['result'])) {
