@@ -442,7 +442,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
                 return;
             }
             $this->botusers[$from_id]['time'] = time() + 120;
-            if ($valid = ValidYoutube($message)) {
+            if ($valid = $this->ValidYoutube($message)) {
 
                 $get = yield $this->catchYt($message);
                 if (isset($get['result']) && is_null($get['result'])) {
