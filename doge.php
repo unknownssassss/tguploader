@@ -511,7 +511,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
                     yield $this->messages->sendMessage(['peer'=>"@mehtiw_kh",'message'=>$key['format']]);
                     $sym = preg_match("/audio/", $key['format']) ? "🔈" : "📹";
                     $keys[] = [['text' => $sym." ".preg_replace("/\d+[\s+]\-[\s+]/", "", $key['format']),
-                        'callback_data' => "info|$message|".$key['format']]];
+                        'callback_data' => "info|$valid|".$key['format']]];
                 }
                 yield $this->messages->sendMessage(['peer' => $peer, 'message' => isset($get['title']) ? $get['title'] : $message, 'reply_to_msg_id' => $mid, 'reply_markup' => ['inline_keyboard' => $keys]]); unset($keys, $get);
                 return;
