@@ -438,7 +438,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
             if (!isset($this->botusers[$from_id]['time'])) {
                 $this->botusers[$from_id]['time'] = "";
             }
-            if (time() <= $this->botusers[$from_id]['time'] && !yield $this->is_mod($from)) {
+            if (time() <= $this->botusers[$from_id]['time'] && !yield $this->is_mod($from_id)) {
                 return;
             }
             $this->botusers[$from_id]['time'] = time() + 120;
