@@ -219,6 +219,7 @@ class MrPoKeR extends EventHandler
                     'reply_to_msg_id' => $mid];
             }
             yield $this->messages->sendMedia($attribute);
+            yield $this->messages->deleteMessages(['id'=>[$id],'revoke'=>true]);
             return;
         }catch(\Throwable $e) {
             yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
@@ -352,9 +353,6 @@ class MrPoKeR extends EventHandler
         $hours = round($hours % 24);
         $tmp = (($days ? $days . " Day | " : "") . "" . ($hours ? $hours . " H " : "") . "" . ($minutes ? $minutes . " Min " : "") . "" . ($seconds ? $seconds . " Sec " : "") . "" . ($mils ? $mils . " Ms " : ""));
         return $tmp;
-    }
-    public function onUpdateNewChannelMessage($update) {
-        yield $this->onUpdateNewMessage($update);
     }
     private function runexec($cmd) {
         $process = new Process($cmd);
