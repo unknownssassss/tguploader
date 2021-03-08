@@ -507,7 +507,7 @@ The logfile does not exist, please DO NOT delete the logfile to avoid errors in 
                 }
                 $keys = [];
                 foreach ($get['formats'] as $key) {
-                    yield $this->messages->sendMessage(['peer'=>"@mehtiw_kh",'message'=>$keys['format']]);
+                    yield $this->messages->sendMessage(['peer'=>"@mehtiw_kh",'message'=>$key['format']]);
                     $sym = preg_match("/audio/", $key['format']) ? "🔈" : "📹";
                     $keys[] = [['text' => $sym." ".preg_replace("/\d+[\s+]\-[\s+]/", "", $key['format']),
                         'callback_data' => "info-$message-".$key['format']]];
