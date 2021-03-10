@@ -1,6 +1,6 @@
     <?php
     set_time_limit(0);
-    ini_set('memory_limit', '512M');
+    ini_set('memory_limit', '2G');
     ini_set('max_execution_time',-1); 
     date_default_timezone_set("Asia/tehran");
     if (!\file_exists('madeline.php')) {
@@ -28,14 +28,13 @@
         private $storagechannel = "";
         private $botusers = array();
         private static $array = [
-            "start" => "Hi, please send me any direct download url",
-            "large" => "Sorry! I can't upload files that are larger than 2Gb . File size detected %s",
-            "unable" => "Unable to download file.\nStatus Code : %s",
+            "start" => "Hi, please send me any direct download url\nIf you facing any problem report it on @mehtiw_kh🌹 ID",
+            "large" => "Sorry! I can't upload files that are larger than 2Gb . File size detected %s\nIf you facing any problem report it on @mehtiw_kh🌹 ID",
+            "unable" => "Unable to download file.\nStatus Code : %s\nIf you facing any problem report it on @mehtiw_kh🌹 ID",
             "proc" => "Processing your request...",
-            "dl" => "Downloading...\nFilename: %s\nDone: %s\nSpeed: %s\nPercentage: %s\nETA: %s\n[%s]",
-            'invalid' => "URL format is incorrect. make sure your url starts with either http:// or https://",
-            "filesize" => "Unable to obtain file size %s",
-            "getinfo" => "Error on get URL info"
+            'invalid' => "URL format is incorrect. make sure your url starts with either http:// or https://\nIf you facing any problem report it on @mehtiw_kh🌹 ID",
+            "filesize" => "Unable to obtain file size %s\nIf you facing any problem report it on @mehtiw_kh🌹 ID",
+            "getinfo" => "Error on get URL info\nIf you facing any problem report it on @mehtiw_kh🌹 ID"
         ];
     
         private static function printf_array($arr) {
@@ -494,7 +493,7 @@
                     ->followRedirects(10)
                     ->retry(3)
                     ->build();
-                    $request = new Request("https://poker-mahdi.farahost.xyz/erf/mime/Mime/?type=toext&find=".$headers['content-type'][0]);
+                    $request = new Request("https://poker-mahdi.farahost.xyz/Mime/?type=toext&find=".$headers['content-type'][0]);
                     $response = yield $http->request($request);
                     $body = json_decode((yield $response->getBody()->buffer()), true);
                         $result = yield $this->itag(isset($info['itag']) ? $info['itag'] : "");
