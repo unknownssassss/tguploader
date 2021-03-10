@@ -1,6 +1,6 @@
 <?php
 set_time_limit(0);
-ini_set('memory_limit', '2G');
+ini_set('memory_limit', '512M');
 ini_set('max_execution_time', -1);
 date_default_timezone_set("Asia/tehran");
 if (!\file_exists('madeline.php')) {
