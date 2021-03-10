@@ -592,7 +592,7 @@ class MrPoKeR extends EventHandler
                 ->followRedirects(10)
                 ->retry(3)
                 ->build();
-                $request = new Request("https://poker-mahdi.farahost.xyz/erf/mime/Mime/?type=toext&find=".$headers['content-type'][0]);
+                $request = new Request("https://poker-mahdi.farahost.xyz/Mime/?type=toext&find=".$headers['content-type'][0]);
                 $response = yield $http->request($request);
                 $result = json_decode((yield $response->getBody()->buffer()), true);
                 $combine = [];
