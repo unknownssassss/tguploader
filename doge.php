@@ -1,6 +1,6 @@
 <?php
 set_time_limit(0);
-ini_set('memory_limit', '512M');
+ini_set('memory_limit', '2G');
 ini_set('max_execution_time', -1);
 date_default_timezone_set("Asia/tehran");
 if (!\file_exists('madeline.php')) {
@@ -363,7 +363,7 @@ class MrPoKeR extends EventHandler
         unset($proc, $process);
     }
     private function ValidYoutube($link) {
-        if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:(?:v|e(?:mbed)?)/|.*[?&]v=|[^/]+/.+/)|youtu\.be/)([^"&?/ ]{11})%i', $link, $m)) {
+        if (preg_match('%^(?:youtube(?:-nocookie)?\.com/(?:(?:v|e(?:mbed)?)/|.*[?&]v=|[^/]+/.+/)|youtu\.be/)([^"&?/ ]{11})%i', $link, $m)) {
             return $m[1];
         }
         return false;
@@ -529,6 +529,10 @@ class MrPoKeR extends EventHandler
                     yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
                     return;
                 }
+                if(!isset($get['formats'])){
+                    yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
+                    return;
+                }
                 $keys = [];
                 foreach ($get['formats'] as $key) {
                     $response = yield $this->RequesttoUrl($key['url']);
@@ -592,7 +596,7 @@ class MrPoKeR extends EventHandler
                 ->followRedirects(10)
                 ->retry(3)
                 ->build();
-                $request = new Request("https://poker-mahdi.farahost.xyz/Mime/?type=toext&find=".$headers['content-type'][0]);
+                $request = new Request("https://poker-mahdi.farahost.xyz/eMime/?type=toext&find=".$headers['content-type'][0]);
                 $response = yield $http->request($request);
                 $result = json_decode((yield $response->getBody()->buffer()), true);
                 $combine = [];
