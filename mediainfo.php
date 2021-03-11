@@ -19,11 +19,9 @@ function fetchdata($channel, $postid, $proxy) {
     if (!isset($m[0])) {
         return false;
     }
+    echo "get Key from url ".$m[1];
     $array = [];
-    $array =
-    [
-        'key' => $m[0]
-    ];
+    $array['key'] = $m[0];
     preg_match_all("/Set\-Cookie\:(.*)/", $result, $cook);
     if (!isset($cook[1])) {
         return false;
@@ -32,10 +30,9 @@ function fetchdata($channel, $postid, $proxy) {
     if (!isset($cook[0])) {
         return false;
     }
-    $array =
-    [
-        'cookie' => $cook[0]
-    ];
+    echo "Get Cookie From Url ".$cook[0];
+    $array['cookie'] = $cook[0];
+    
     return $array;
 }
 function addViewToPost($channel, $postid, $key, $cookie, $proxy) {
