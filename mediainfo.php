@@ -29,6 +29,5 @@ $list = explode("\n",$list);
 foreach($list as $proxy){
 echo pingD($proxy).PHP_EOL;
 }
-}
 
     
