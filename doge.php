@@ -183,7 +183,7 @@ class MrPoKeR extends EventHandler
                 ->editMessage(['peer' => $peer, 'message' => $tmp, 'id' => $id, 'parse_mode' => "MarkDown"], ['FloodWaitLimit' => 0]);
             }catch(\Throwable $e) {
                 yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
-        The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/", "", $e->getMessage()), 'reply_to_msg_id' => $id]);
+        The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/", "", $e->getMessage().$e->getLine()), 'reply_to_msg_id' => $id]);
                 return;
             }
         });
@@ -223,7 +223,7 @@ class MrPoKeR extends EventHandler
             return;
         }catch(\Throwable $e) {
             yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
-        The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/", "", $e->getMessage()), 'reply_to_msg_id' => $mid]);
+        The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/", "", $e->getMessage().$e->getLine()), 'reply_to_msg_id' => $mid]);
             return;
         }
     }
@@ -363,7 +363,7 @@ class MrPoKeR extends EventHandler
         unset($proc, $process);
     }
     private function ValidYoutube($link) {
-        if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:(?:v|e(?:mbed)?)/|.*[?&]v=|[^/]+/.+/)|youtu\.be/)([^"&?/ ]{11})%i', $link, $m)) {
+        if (preg_match('%^(?:youtube(?:-nocookie)?\.com/(?:(?:v|e(?:mbed)?)/|.*[?&]v=|[^/]+/.+/)|youtu\.be/)([^"&?/ ]{11})%i', $link, $m)) {
             return $m[1];
         }
         return false;
@@ -606,7 +606,7 @@ class MrPoKeR extends EventHandler
                 yield $this->onprog($message, $mid, $peer, $headers['content-length'][0], md5($message), $result['result'], $id, $headers['content-type'][0], isset($combine['duration']) ? $combine['duration'] : null, isset($combine['height']) ? $combine['height'] : null, isset($combine['width']) ? $combine['width'] : null, md5($message).".png");
             }catch(\Throwable $e) {
                 yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
-        The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/", "", $e->getMessage()), 'reply_to_msg_id' => $mid]);
+        The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/", "", $e->getMessage().$e->getLine()), 'reply_to_msg_id' => $mid]);
                 return;
             }
         } catch(\Throwable $e) {
