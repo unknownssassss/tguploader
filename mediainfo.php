@@ -4,8 +4,8 @@ ini_set('memory_limit', -1);
 ini_set('max_execution_time', -1);
 function fetchdata($channel, $postid, $proxy) {
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 20);
     curl_setopt($ch, CURLOPT_HEADER, true);
     curl_setopt($ch, CURLOPT_URL, "https://t.me/$channel/$postid?embed=1");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -39,7 +39,7 @@ function fetchdata($channel, $postid, $proxy) {
 
     return $array;
 }
-function addViewToPost($key, $cookie, $proxy) {
+function addViewToPost($channel,$postid,$key, $cookie, $proxy) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
     curl_setopt($ch, CURLOPT_TIMEOUT, 10);
@@ -56,7 +56,7 @@ function addViewToPost($key, $cookie, $proxy) {
 function run($channel, $postid, $proxy) {
     $fetch = fetchdata($channel, $postid, $proxy);
     if (is_array($fetch) && isset($fetch['key']) && isset($fetch['cookie'])) {
-        $result = addViewToPost($fetch['key'], $fetch['cookie'], $proxy);
+        $result = addViewToPost($channel,$postid,$fetch['key'], $fetch['cookie'], $proxy);
         if ($result) {
             return "proxy $proxy finished its job successfully";
         } else {
