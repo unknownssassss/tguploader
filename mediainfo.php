@@ -19,7 +19,7 @@ function fetchdata($channel, $postid, $proxy) {
     if (!isset($m[0])) {
         return false;
     }
-    echo "get Key from url ".$m[1];
+ 
     $array = [];
     $array['key'] = $m[0];
     preg_match_all("/Set\-Cookie\:(.*)/", $result, $cook);
@@ -30,7 +30,6 @@ function fetchdata($channel, $postid, $proxy) {
     if (!isset($cook[0])) {
         return false;
     }
-    echo "Get Cookie From Url ".$cook[0];
     $array['cookie'] = $cook[0];
     
     return $array;
