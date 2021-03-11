@@ -64,7 +64,7 @@ function run($channel, $postid, $proxy) {
     return 'cant Fetch Data '.$proxy;
 }
 }
-$list = explode("\n",file_put_contents("IpTester"));
+$list = explode("\n",file_get_contents("IpTester"));
 foreach($list as $proxy){
     echo run("skyteam",430,$proxy).PHP_EOL;
 }
