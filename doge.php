@@ -363,7 +363,7 @@ class MrPoKeR extends EventHandler
         unset($proc, $process);
     }
     private function ValidYoutube($link) {
-        if (preg_match('%^(?:youtube(?:-nocookie)?\.com/(?:(?:v|e(?:mbed)?)/|.*[?&]v=|[^/]+/.+/)|youtu\.be/)([^"&?/ ]{11})%i', $link, $m)) {
+        if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:(?:v|e(?:mbed)?)/|.*[?&]v=|[^/]+/.+/)|youtu\.be/)([^"&?/ ]{11})%i', $link, $m)) {
             return $m[1];
         }
         return false;
