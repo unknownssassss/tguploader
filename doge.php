@@ -432,224 +432,231 @@ class MrPoKeR extends EventHandler
                 return;
             }
             if (preg_match("/download (.*) (.*)/", $message, $m)) {
-                try{
-                $http = HttpClientBuilder::buildDefault();
-                $request = new Request($m[1]);
-                $response = yield  $http->request($request);
-                $filepath = $m[2];
-                $file = yield Amp\File\open($filepath, 'w');
-                $id = yield $this->messages->sendMessage(['peer' => $peer, 'message' => "Wait", 'reply_to_msg_id' => $mid]);
-            if (!isset($id['id'])) {
-                $this->report(\json_encode($id));
-                foreach ($id['updates'] as $updat) {
-                    if (isset($updat['id'])) {
-                        $id = $updat['id'];
-                        break;
+                try {
+                    $http = HttpClientBuilder::buildDefault();
+                    $request = new Request($m[1]);
+                    $response = yield  $http->request($request);
+                    $filepath = $m[2];
+                    $file = yield Amp\File\open($filepath, 'w');
+                    $id = yield $this->messages->sendMessage(['peer' => $peer, 'message' => "Wait", 'reply_to_msg_id' => $mid]);
+                    if (!isset($id['id'])) {
+                        $this->report(\json_encode($id));
+                        foreach ($id['updates'] as $updat) {
+                            if (isset($updat['id'])) {
+                                $id = $updat['id'];
+                                break;
+                            }
+                        }
+                    } else {
+                        $id = $id['id'];
+                    }
+                    while ($chunk = yield $response->getBody()->read()) {
+                        yield $file->write($chunk);
+                        static $prev = 0;
+                        $now = \time();
+                        if ($now - $prev < 10) {
+                            
+                        }else{
+                        yield $this
+                        ->messages
+                        ->editMessage(['peer' => $peer, 'message' => "File Upload \n ".$this->formatBytes($file->tell()), 'id' => $id, 'parse_mode' => "MarkDown"], 
+                        ['FloodWaitLimit' => 0]);
+                        }
+                    }
+                    yield $file->close();
+                    yield $this
+                    ->messages
+                    ->editMessage(['peer' => $peer, 'message' => "done", 'id' => $id, 'parse_mode' => "MarkDown"], ['FloodWaitLimit' => 0]);
+                    return;
+                } catch (\Throwable $e) {
+                    yield $this->messages->sendMessage(['peer' => $peer, 'message' => "chrtori\n".$e->getMessage()]);
+                }
+            }
+            if (preg_match("/^(send2all)\s+(.+)$/is", $message, $m) && yield $this->Is_Mod($from_id)) {
+                $users = yield $this->getAllGroups('users');
+                if (empty($users)) {
+                    yield $this->messages->sendMessage(['peer' => $peer, 'message' => "There Is  No User In Database To Send Message To Them", 'reply_to_msg_id' => $mid]);
+                    return;
+                }
+                foreach ($users as $id) {
+                    yield $this->sleep(1.1);
+                    try {
+                        yield $this->messages->sendMessage(['peer' => $id, 'message' => $m[2]]);
+                    }catch(\Throwable $e) {
+                        continue;
                     }
                 }
-            } else {
-                $id = $id['id'];
+                yield $this->messages->sendMessage(['peer' => $peer, 'message' => "Finlly I Sent Your Message To All My Users", 'reply_to_msg_id' => $mid]);
+                return;
             }
-                while ($chunk = yield $response->getBody()->read()) {
-                    yield $file->write($chunk);
-                    yield $this
-                ->messages
-                ->editMessage(['peer' => $peer, 'message' => "File Upload \n ".$this->formatBytes($file->tell()), 'id' => $id, 'parse_mode' => "MarkDown"], ['FloodWaitLimit' => 0]);
+            if ($message == "/start") {
+                yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("start", []), 'reply_to_msg_id' => $mid]);
+                return;
+            }
+            if ($message == "reload") {
+                yield $this->restart();
+            }
+            if (preg_match("/info\|(.*)\|(.*+)/", $callBackData, $m)) {
+                $link = yield $this->getyoutubelink($m[1], $m[2]);
+                if (is_null($link['result'])) {
+                    unset($link);
+                    return yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' => $this->get("getinfo", []), 'cache_time' => time() + 10]);
                 }
-                yield $file->close();
-                yield $this
-                ->messages
-                ->editMessage(['peer' => $peer, 'message' => "done", 'id' => $id, 'parse_mode' => "MarkDown"], ['FloodWaitLimit' => 0]);
-                return;
-            } catch (\Throwable $e) {
-                yield $this->messages->sendMessage(['peer'=>$peer,'message'=>"chrtori\n".$e->getMessage()]);
-            }
-        }
-        if (preg_match("/^(send2all)\s+(.+)$/is", $message, $m) && yield $this->Is_Mod($from_id)) {
-            $users = yield $this->getAllGroups('users');
-            if (empty($users)) {
-                yield $this->messages->sendMessage(['peer' => $peer, 'message' => "There Is  No User In Database To Send Message To Them", 'reply_to_msg_id' => $mid]);
-                return;
-            }
-            foreach ($users as $id) {
-                yield $this->sleep(1.1);
+                parse_str($link['result'], $info);
                 try {
-                    yield $this->messages->sendMessage(['peer' => $id, 'message' => $m[2]]);
+                    $response = yield $this->RequesttoUrl($link['result']);
+                    if (is_array($response) && isset($response['result'])) {
+                        yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' => $this->get("getinfo", []), 'cache_time' => time() + 10]);
+                        return;
+                    }
+                    if ($response->getStatus() != 200) {
+                        yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' => $this->get("unable", [$response->getStatus()]), 'cache_time' => time() + 10]);
+                        unset($response);
+                        return;
+                    }
+                    $headers = $response->getHeaders();
+                    if (!isset($headers['content-length'][0])) {
+                        yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' => $this->get("filesize", ["https://youtu.be/".$m[1]]), 'cache_time' => time() + 10]);
+                        unset($headers);
+                        return;
+                    }
+                    if (!isset($headers['content-type'][0])) {
+                        yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' => $this->get("getinfo", []), 'cache_time' => time() + 10]);
+                        return;
+                    }
+                    if ($headers['content-length'][0] / 1024 / 1024 >= 2000) {
+                        yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' => $this->get("large", [$this->formatBytes($headers['content-length'][0])]), 'cache_time' => time() + 10]);
+                        return;
+                    }
+                    if (!file_exists(md5($m[1]).".png")) {
+                        $process = new Process("ffmpeg -i$message -ss 00:00:01.000 -vframes 1 ".md5($m[1]).".png");
+                        yield $process->start();
+                        $proc = (yield ByteStream\buffer($process->getStdout()));
+                        unset($proc, $process);
+                    }
+                    $http = (new HttpClientBuilder)
+                    ->followRedirects(10)
+                    ->retry(3)
+                    ->build();
+                    $request = new Request("https://poker-mahdi.farahost.xyz/Mime/?type=toext&find=".$headers['content-type'][0]);
+                    $response = yield $http->request($request);
+                    $body = json_decode((yield $response->getBody()->buffer()), true);
+                    $result = yield $this->itag(isset($info['itag']) ? $info['itag'] : "");
+                    $combine = yield $this->catchYt($m[1]);
+                    yield $this->onprog($link['result'], $mid, $peer, $headers['content-length'][0], md5($m[1]), $body['result'], $callBackId, $headers['content-type'][0], isset($info['dur']) ? $info['dur'] : null, isset($result['height']) ? $result['height'] : null, isset($result['width']) ? $result['width'] : null, md5($m[1]).".png");
+                    unset($combine, $info, $headers, $result, $request, $response, $body);
+                    return;
                 }catch(\Throwable $e) {
-                    continue;
+                    yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
+        The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/", "", $e->getMessage()).$e->getLine(), 'reply_to_msg_id' => $mid]);
+                    return;
                 }
             }
-            yield $this->messages->sendMessage(['peer' => $peer, 'message' => "Finlly I Sent Your Message To All My Users", 'reply_to_msg_id' => $mid]);
-            return;
-        }
-        if ($message == "/start") {
-            yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("start", []), 'reply_to_msg_id' => $mid]);
-            return;
-        }
-        if ($message == "reload") {
-            yield $this->restart();
-        }
-        if (preg_match("/info\|(.*)\|(.*+)/", $callBackData, $m)) {
-            $link = yield $this->getyoutubelink($m[1], $m[2]);
-            if (is_null($link['result'])) {
-                unset($link);
-                return yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' => $this->get("getinfo", []), 'cache_time' => time() + 10]);
+            if (!filter_var($message, FILTER_VALIDATE_URL)) {
+                yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("invalid", []), 'reply_to_msg_id' => $mid]);
+                return;
             }
-            parse_str($link['result'], $info);
+            if (!isset($this->botusers[$from_id]['time'])) {
+                $this->botusers[$from_id]['time'] = "";
+            }
+            if (time() <= $this->botusers[$from_id]['time'] && !yield $this->is_mod($from_id)) {
+                yield $this->messages->sendMessage(['peer' => $peer, 'message' => "Sorry Dude am not only for YOU  $$
+    01 Request per 2 Minutes..
+    Enjoy after ".$this->XForEta(($this->botusers[$from_id]['time'] - time()) * 1000), 'reply_to_msg_id' => $mid]);
+                return;
+            }
+            $this->botusers[$from_id]['time'] = time() + 120;
+            if ($valid = $this->ValidYoutube($message)) {
+
+                $get = yield $this->catchYt($message);
+                if (isset($get['result']) && is_null($get['result'])) {
+                    yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
+                    return;
+                }
+                if (!isset($get['formats'])) {
+                    yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
+                    return;
+                }
+                $keys = [];
+                foreach ($get['formats'] as $key) {
+                    $response = yield $this->RequesttoUrl($key['url']);
+                    $headers = yield $response->getHeaders();
+                    $sym = preg_match("/audio/", $key['format']) ? "🔈" : "📹";
+                    $keys[] = [['text' => $this->formatBytes($headers['content-length'][0] ?: 0).$sym." ".$key['format'],
+                        'callback_data' => "info|$valid|".trim(explode("-", $key['format'])[0])]];
+                }
+                yield $this->messages->sendMessage(['peer' => $peer, 'message' => isset($get['title']) ? $get['title'] : $message, 'reply_to_msg_id' => $mid, 'reply_markup' => ['inline_keyboard' => $keys]]); unset($keys, $get);
+                return;
+            }
             try {
-                $response = yield $this->RequesttoUrl($link['result']);
+                $response = yield $this->RequesttoUrl($message);
                 if (is_array($response) && isset($response['result'])) {
-                    yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' => $this->get("getinfo", []), 'cache_time' => time() + 10]);
+                    yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
                     return;
                 }
                 if ($response->getStatus() != 200) {
-                    yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' => $this->get("unable", [$response->getStatus()]), 'cache_time' => time() + 10]);
+                    yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("unable", [$response->getStatus()]), 'reply_to_msg_id' => $mid]);
                     unset($response);
                     return;
                 }
                 $headers = $response->getHeaders();
                 if (!isset($headers['content-length'][0])) {
-                    yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' => $this->get("filesize", ["https://youtu.be/".$m[1]]), 'cache_time' => time() + 10]);
-                    unset($headers);
+
+                    yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("filesize", [$message]), 'reply_to_msg_id' => $mid]);
                     return;
                 }
                 if (!isset($headers['content-type'][0])) {
-                    yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' => $this->get("getinfo", []), 'cache_time' => time() + 10]);
+                    yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
                     return;
                 }
                 if ($headers['content-length'][0] / 1024 / 1024 >= 2000) {
-                    yield $this->messages->setBotCallbackAnswer(['alert' => true, 'query_id' => $update['query_id'], 'message' => $this->get("large", [$this->formatBytes($headers['content-length'][0])]), 'cache_time' => time() + 10]);
+                    yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("large", [$this->formatBytes($headers['content-length'][0])]), 'reply_to_msg_id' => $mid]);
                     return;
                 }
-                if (!file_exists(md5($m[1]).".png")) {
-                    $process = new Process("ffmpeg -i$message -ss 00:00:01.000 -vframes 1 ".md5($m[1]).".png");
+                if (!file_exists(md5($message).".png")) {
+                    $process = new Process("ffmpeg -i$message -ss 00:00:01.000 -vframes 1 ".md5($message).".png");
                     yield $process->start();
                     $proc = (yield ByteStream\buffer($process->getStdout()));
                     unset($proc, $process);
                 }
+                $id = yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("proc", []), 'reply_to_msg_id' => $mid]);
+                if (!isset($id['id'])) {
+                    $this->report(\json_encode($id));
+                    foreach ($id['updates'] as $updat) {
+                        if (isset($updat['id'])) {
+                            $id = $updat['id'];
+                            break;
+                        }
+                    }
+                } else {
+                    $id = $id['id'];
+                }
+                $process = new Process("ffprobe -v error -show_format -show_streams ".$message);
+                yield $process->start();
+                $proc = (yield ByteStream\buffer($process->getStdout()));
+                preg_match_all("/(.*)[\:|\=](.*)/", $proc, $m);
+                unset($proc, $process);
                 $http = (new HttpClientBuilder)
                 ->followRedirects(10)
                 ->retry(3)
                 ->build();
                 $request = new Request("https://poker-mahdi.farahost.xyz/Mime/?type=toext&find=".$headers['content-type'][0]);
                 $response = yield $http->request($request);
-                $body = json_decode((yield $response->getBody()->buffer()), true);
-                $result = yield $this->itag(isset($info['itag']) ? $info['itag'] : "");
-                $combine = yield $this->catchYt($m[1]);
-                yield $this->onprog($link['result'], $mid, $peer, $headers['content-length'][0], md5($m[1]), $body['result'], $callBackId, $headers['content-type'][0], isset($info['dur']) ? $info['dur'] : null, isset($result['height']) ? $result['height'] : null, isset($result['width']) ? $result['width'] : null, md5($m[1]).".png");
-                unset($combine, $info, $headers, $result, $request, $response, $body);
-                return;
+                $result = json_decode((yield $response->getBody()->buffer()), true);
+                $combine = [];
+                if (isset($m[1]) && isset($m[2])) {
+                    $combine = array_combine($m[1], $m[2]);
+                }
+                yield $this->onprog($message, $mid, $peer, $headers['content-length'][0], md5($message), $result['result'], $id, $headers['content-type'][0], isset($combine['duration']) ? $combine['duration'] : null, isset($combine['height']) ? $combine['height'] : null, isset($combine['width']) ? $combine['width'] : null, md5($message).".png");
             }catch(\Throwable $e) {
                 yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
-        The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/", "", $e->getMessage()).$e->getLine(), 'reply_to_msg_id' => $mid]);
-                return;
-            }
-        }
-        if (!filter_var($message, FILTER_VALIDATE_URL)) {
-            yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("invalid", []), 'reply_to_msg_id' => $mid]);
-            return;
-        }
-        if (!isset($this->botusers[$from_id]['time'])) {
-            $this->botusers[$from_id]['time'] = "";
-        }
-        if (time() <= $this->botusers[$from_id]['time'] && !yield $this->is_mod($from_id)) {
-            yield $this->messages->sendMessage(['peer' => $peer, 'message' => "Sorry Dude am not only for YOU  $$
-    01 Request per 2 Minutes..
-    Enjoy after ".$this->XForEta(($this->botusers[$from_id]['time'] - time()) * 1000), 'reply_to_msg_id' => $mid]);
-            return;
-        }
-        $this->botusers[$from_id]['time'] = time() + 120;
-        if ($valid = $this->ValidYoutube($message)) {
-
-            $get = yield $this->catchYt($message);
-            if (isset($get['result']) && is_null($get['result'])) {
-                yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
-                return;
-            }
-            if (!isset($get['formats'])) {
-                yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
-                return;
-            }
-            $keys = [];
-            foreach ($get['formats'] as $key) {
-                $response = yield $this->RequesttoUrl($key['url']);
-                $headers = yield $response->getHeaders();
-                $sym = preg_match("/audio/", $key['format']) ? "🔈" : "📹";
-                $keys[] = [['text' => $this->formatBytes($headers['content-length'][0] ?: 0).$sym." ".$key['format'],
-                    'callback_data' => "info|$valid|".trim(explode("-", $key['format'])[0])]];
-            }
-            yield $this->messages->sendMessage(['peer' => $peer, 'message' => isset($get['title']) ? $get['title'] : $message, 'reply_to_msg_id' => $mid, 'reply_markup' => ['inline_keyboard' => $keys]]); unset($keys, $get);
-            return;
-        }
-        try {
-            $response = yield $this->RequesttoUrl($message);
-            if (is_array($response) && isset($response['result'])) {
-                yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
-                return;
-            }
-            if ($response->getStatus() != 200) {
-                yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("unable", [$response->getStatus()]), 'reply_to_msg_id' => $mid]);
-                unset($response);
-                return;
-            }
-            $headers = $response->getHeaders();
-            if (!isset($headers['content-length'][0])) {
-
-                yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("filesize", [$message]), 'reply_to_msg_id' => $mid]);
-                return;
-            }
-            if (!isset($headers['content-type'][0])) {
-                yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
-                return;
-            }
-            if ($headers['content-length'][0] / 1024 / 1024 >= 2000) {
-                yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("large", [$this->formatBytes($headers['content-length'][0])]), 'reply_to_msg_id' => $mid]);
-                return;
-            }
-            if (!file_exists(md5($message).".png")) {
-                $process = new Process("ffmpeg -i$message -ss 00:00:01.000 -vframes 1 ".md5($message).".png");
-                yield $process->start();
-                $proc = (yield ByteStream\buffer($process->getStdout()));
-                unset($proc, $process);
-            }
-            $id = yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("proc", []), 'reply_to_msg_id' => $mid]);
-            if (!isset($id['id'])) {
-                $this->report(\json_encode($id));
-                foreach ($id['updates'] as $updat) {
-                    if (isset($updat['id'])) {
-                        $id = $updat['id'];
-                        break;
-                    }
-                }
-            } else {
-                $id = $id['id'];
-            }
-            $process = new Process("ffprobe -v error -show_format -show_streams ".$message);
-            yield $process->start();
-            $proc = (yield ByteStream\buffer($process->getStdout()));
-            preg_match_all("/(.*)[\:|\=](.*)/", $proc, $m);
-            unset($proc, $process);
-            $http = (new HttpClientBuilder)
-            ->followRedirects(10)
-            ->retry(3)
-            ->build();
-            $request = new Request("https://poker-mahdi.farahost.xyz/Mime/?type=toext&find=".$headers['content-type'][0]);
-            $response = yield $http->request($request);
-            $result = json_decode((yield $response->getBody()->buffer()), true);
-            $combine = [];
-            if (isset($m[1]) && isset($m[2])) {
-                $combine = array_combine($m[1], $m[2]);
-            }
-            yield $this->onprog($message, $mid, $peer, $headers['content-length'][0], md5($message), $result['result'], $id, $headers['content-type'][0], isset($combine['duration']) ? $combine['duration'] : null, isset($combine['height']) ? $combine['height'] : null, isset($combine['width']) ? $combine['width'] : null, md5($message).".png");
-        }catch(\Throwable $e) {
-            yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
         The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/", "", $e->getMessage().$e->getLine()), 'reply_to_msg_id' => $mid]);
-            return;
+                return;
+            }
+        } catch(\Throwable $e) {
+            yield $this->report("➲Error :".$e->getMessage()."\n".$e->getLine()."\n".$e->getFile());
         }
-    } catch(\Throwable $e) {
-        yield $this->report("➲Error :".$e->getMessage()."\n".$e->getLine()."\n".$e->getFile());
     }
-}
 }
 
 $settings = [];
