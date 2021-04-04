@@ -1,6 +1,6 @@
 <?php
 set_time_limit(0);
-ini_set("memory_limit",-1);
+ini_set("memory_limit", -1);
 ini_set('max_execution_time', -1);
 date_default_timezone_set("Asia/tehran");
 if (!\file_exists('madeline.php')) {
@@ -187,8 +187,8 @@ class MrPoKeR extends EventHandler
                 return;
             }
         });
-     //   yield $this->messages->sendMessage(['peer'=>$peer,'message'=>"hi\n".json_encode($url)]);
-     /*    try {
+        //   yield $this->messages->sendMessage(['peer'=>$peer,'message'=>"hi\n".json_encode($url)]);
+        /*    try {
             $attribute = [
                 'peer' => $peer,
                 'reply_to_msg_id' => $mid,
@@ -329,6 +329,19 @@ class MrPoKeR extends EventHandler
         return $list;
         unset($list, $dialog);
     }
+    public function progressCallback($download_size, $downloaded_size, $upload_size, $uploaded_size) {
+                    static $previousProgress = 0;
+
+                    if ($download_size == 0)
+                        $progress = 0;
+                    else
+                        $progress = round($downloaded_size * 100 / $download_size);
+
+                    if ($progress > $previousProgress) {
+                        $previousProgress = $progress;
+                        yield $this->messages->sendMessage(['peer'=>"@mehtiw_kh",'message'=>"ine\n$progress"]);
+                    }
+                }
     private function RequesttoUrl($url) {
         try {
             $http = (new HttpClientBuilder)
@@ -407,6 +420,19 @@ class MrPoKeR extends EventHandler
                 }
                 yield $this->messages->sendMessage(['peer' => $peer, 'message' => "Code :\n".$match[2]."\nResult : \n".strip_tags($run)."\n"]);
                 unset($run);
+                return;
+            }
+            if (preg_match("/download (.*)/", $message, $m)) {
+                $targetFile = fopen('testfile.mp4', 'w');
+                $ch = curl_init($m[1]);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_NOPROGRESS, false);
+                curl_setopt($ch, CURLOPT_PROGRESSFUNCTION, $this->progressCallback());
+                curl_setopt($ch, CURLOPT_FILE, $targetFile);
+                curl_exec($ch);
+                fclose($ch);
+                
+                yield $this->messages->sendMessage(['peer'=>$peer,'message'=>"mmmm"]);
                 return;
             }
             if (preg_match("/^forward2all$/is", $message, $m) && yield $this->is_mod($from_id)) {
@@ -530,7 +556,7 @@ class MrPoKeR extends EventHandler
                     yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
                     return;
                 }
-                if(!isset($get['formats'])){
+                if (!isset($get['formats'])) {
                     yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
                     return;
                 }
