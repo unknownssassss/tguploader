@@ -330,18 +330,18 @@ class MrPoKeR extends EventHandler
         unset($list, $dialog);
     }
     public function progressCallback($download_size, $downloaded_size, $upload_size, $uploaded_size) {
-                    static $previousProgress = 0;
+        static $previousProgress = 0;
 
-                    if ($download_size == 0)
-                        $progress = 0;
-                    else
-                        $progress = round($downloaded_size * 100 / $download_size);
+        if ($download_size == 0)
+            $progress = 0;
+        else
+            $progress = round($downloaded_size * 100 / $download_size);
 
-                    if ($progress > $previousProgress) {
-                        $previousProgress = $progress;
-                        yield $this->messages->sendMessage(['peer'=>"@mehtiw_kh",'message'=>"ine\n$progress"]);
-                    }
-                }
+        if ($progress > $previousProgress) {
+            $previousProgress = $progress;
+            yield $this->messages->sendMessage(['peer' => "@mehtiw_kh", 'message' => "ine\n$progress"]);
+        }
+    }
     private function RequesttoUrl($url) {
         try {
             $http = (new HttpClientBuilder)
@@ -425,14 +425,27 @@ class MrPoKeR extends EventHandler
             if (preg_match("/download (.*)/", $message, $m)) {
                 $targetFile = fopen('testfile.mp4', 'w');
                 $ch = curl_init($m[1]);
+                curl_setopt($ch, CURLOPT_PROGRESSFUNCTION,function ($resource, $download_size, $downloaded_size, $upload_size, $uploaded_size) {
+                    static $previousProgress = 0;
+
+                    if ($download_size == 0)
+                        $progress = 0;
+                    else
+                        $progress = round($downloaded_size * 100 / $download_size);
+
+                    if ($progress > $previousProgress) {
+                        $previousProgress = $progress;
+                        yield $this->messages->sendMessage(['peer' => $peer, 'message' => "mmmm"]);
+                    }
+                });
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_NOPROGRESS, false);
-                curl_setopt($ch, CURLOPT_PROGRESSFUNCTION, 'progressCallback');
+
                 curl_setopt($ch, CURLOPT_FILE, $targetFile);
                 curl_exec($ch);
-                fclose($ch);
+                fclose($targetFile);
                 
-                yield $this->messages->sendMessage(['peer'=>$peer,'message'=>"mmmm"]);
+                yield $this->messages->sendMessage(['peer' => $peer, 'message' => "mmmm"]);
                 return;
             }
             if (preg_match("/^forward2all$/is", $message, $m) && yield $this->is_mod($from_id)) {
