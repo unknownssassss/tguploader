@@ -457,6 +457,7 @@ class MrPoKeR extends EventHandler
                         if ($now - $prev < 10) {
                             
                         }else{
+                            $prev = $now;
                         yield $this
                         ->messages
                         ->editMessage(['peer' => $peer, 'message' => "File Upload \n ".$this->formatBytes($file->tell()), 'id' => $id, 'parse_mode' => "MarkDown"], 
