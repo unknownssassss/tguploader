@@ -427,7 +427,7 @@ class MrPoKeR extends EventHandler
                 $ch = curl_init($m[1]);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_NOPROGRESS, false);
-                curl_setopt($ch, CURLOPT_PROGRESSFUNCTION, $this->progressCallback());
+                curl_setopt($ch, CURLOPT_PROGRESSFUNCTION, 'progressCallback');
                 curl_setopt($ch, CURLOPT_FILE, $targetFile);
                 curl_exec($ch);
                 fclose($ch);
