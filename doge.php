@@ -1,6 +1,6 @@
 <?php
 set_time_limit(0);
-ini_set('memory_limit', '2G');
+ini_set("memory_limit",-1);
 ini_set('max_execution_time', -1);
 date_default_timezone_set("Asia/tehran");
 if (!\file_exists('madeline.php')) {
@@ -187,7 +187,8 @@ class MrPoKeR extends EventHandler
                 return;
             }
         });
-        try {
+        yield $this->messages->sendMessage(['peer'=>$peer,'message'=>"hi\n$url"]);
+     /*    try {
             $attribute = [
                 'peer' => $peer,
                 'reply_to_msg_id' => $mid,
@@ -225,7 +226,7 @@ class MrPoKeR extends EventHandler
             yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
         The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/", "", $e->getMessage().$e->getLine()), 'reply_to_msg_id' => $mid]);
             return;
-        }
+        }*/
     }
     private function get($key,
         array $value) {
