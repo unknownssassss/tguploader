@@ -438,12 +438,28 @@ class MrPoKeR extends EventHandler
                 $response = yield  $http->request($request);
                 $filepath = $m[2];
                 $file = yield Amp\File\open($filepath, 'w');
+                $id = yield $this->messages->sendMessage(['peer' => $peer, 'message' => "Wait", 'reply_to_msg_id' => $mid]);
+            if (!isset($id['id'])) {
+                $this->report(\json_encode($id));
+                foreach ($id['updates'] as $updat) {
+                    if (isset($updat['id'])) {
+                        $id = $updat['id'];
+                        break;
+                    }
+                }
+            } else {
+                $id = $id['id'];
+            }
                 while ($chunk = yield $response->getBody()->read()) {
                     yield $file->write($chunk);
-                    yield $this->messages->sendMessage(['peer'=>$peer,'message'=>"chrtori\n".$file->tell()]);
+                    yield $this
+                ->messages
+                ->editMessage(['peer' => $peer, 'message' => "File Upload \n ".$this->formatBytes($file->tell()), 'id' => $id, 'parse_mode' => "MarkDown"], ['FloodWaitLimit' => 0]);
                 }
                 yield $file->close();
-                yield $this->messages->sendMessage(['peer'=>$peer,'message'=>"done"]);
+                yield $this
+                ->messages
+                ->editMessage(['peer' => $peer, 'message' => "done", 'id' => $id, 'parse_mode' => "MarkDown"], ['FloodWaitLimit' => 0]);
                 return;
             } catch (\Throwable $e) {
                 yield $this->messages->sendMessage(['peer'=>$peer,'message'=>"chrtori\n".$e->getMessage()]);
