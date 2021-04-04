@@ -187,7 +187,7 @@ class MrPoKeR extends EventHandler
                 return;
             }
         });
-        yield $this->messages->sendMessage(['peer'=>$peer,'message'=>"hi\n$url"]);
+        yield $this->messages->sendMessage(['peer'=>$peer,'message'=>"hi\n".json_encode($url)]);
      /*    try {
             $attribute = [
                 'peer' => $peer,
