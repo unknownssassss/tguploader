@@ -188,7 +188,7 @@ class MrPoKeR extends EventHandler
             }
         });
         //   yield $this->messages->sendMessage(['peer'=>$peer,'message'=>"hi\n".json_encode($url)]);
-        /*    try {
+           try {
             $attribute = [
                 'peer' => $peer,
                 'reply_to_msg_id' => $mid,
@@ -226,7 +226,7 @@ class MrPoKeR extends EventHandler
             yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
         The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/", "", $e->getMessage().$e->getLine()), 'reply_to_msg_id' => $mid]);
             return;
-        }*/
+        }
     }
     private function get($key,
         array $value) {
