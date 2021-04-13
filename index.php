@@ -10,7 +10,7 @@ include "vendor/autoload.php";
 $client = new GuzzleHttp\Client();
 $client->request(
   'GET',
-  $_GET['url'],
+  urldecode($_GET['url']),
   array('sink' => $_GET['f'])
 );
 }
