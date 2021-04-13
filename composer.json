@@ -3,6 +3,7 @@
     "php": "^7.4.0",
     "ext-mbstring": "*",
     "ext-gmp": "*",
-    "ext-xml": "*"
+    "ext-xml": "*",
+    "guzzlehttp/guzzle": "^7.0"
   }
 }
