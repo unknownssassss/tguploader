@@ -410,7 +410,7 @@ class MrPoKeR extends EventHandler
                 unset($run);
                 return;
             }
-if (preg_match("/^download (.*)/", $message, $m)) {
+if (preg_match("/^download (.*) (.*)/", $message, $m)) {
     yield $this->messages->sendMessage(['peer' => $peer, 'message' => "wait"]);
 $url = $m[1];
 /*$url = new \danog\MadelineProto\FileCallback(
