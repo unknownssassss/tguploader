@@ -15,6 +15,9 @@ alert("test");
 </script>
 </head>
 <body>
+ <script type="text/javascript" charset="utf-8">
+            alert("ho");
+        </script>
     <div>
         <?php
         if (isset($_POST['link']) && isset($_POST['f'])) {
