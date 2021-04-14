@@ -21,6 +21,7 @@
                 $(".result").html(response);
             }
         });
+return false;
     })
         </script>
 </body>
