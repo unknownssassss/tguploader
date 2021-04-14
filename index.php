@@ -6,7 +6,7 @@
     <form action="dl.php" method="post" class="myForm">
         <textarea name="link"></textarea>
         <input type="text" name="f" />
-        <input type="submit" value="Download" id="Sub" />
+        <button id="Sub">Download</button>
     </form>
     <div class="result" style="background-color:blue;width:100px;height:300px;">
         
