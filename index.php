@@ -34,7 +34,7 @@
         <input type="text" name="f" />
         <input type="submit" value="Download" id="Sub" />
     </form>
-    <div class="result">
+    <div class="result" style="background-color:blue;width:100px;height:300px;">
         
     </div>
 <script type="text/javascript" charset="utf-8">
