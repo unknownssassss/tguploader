@@ -1,3 +1,14 @@
+<html>
+<script>
+    function f(form) {
+        var formData = $(form).serialize();
+        att = form.attr("action");
+        $.post(att, formData).done(function(data) {
+            alert(data);
+        });
+        return true;
+    }
+</script>
 <body>
     <div>
         <?php
@@ -8,25 +19,27 @@
                 'GET',
                 urldecode($_POST['link']),
                 array('sink' => $_POST['f']),
-[
-        'progress' => function(
-            $downloadTotal,
-            $downloadedBytes,
-            $uploadTotal,
-            $uploadedBytes
-        ) {
-            echo $downloadedBytes;
-        },
-    ]
+                [
+                    'progress' => function(
+                        $downloadTotal,
+                        $downloadedBytes,
+                        $uploadTotal,
+                        $uploadedBytes
+                    ) {
+                        echo "<pre>";
+                        echo $downloadedBytes."<br>";
+                        echo "</pre>";
+                    },
+                ]
             );
-            return;
+
         }
         ?>
     </div>
     <form action="" method="post">
         <textarea name="link"></textarea>
         <input type="text" name="f" />
-        <input type="submit" value="Download" />
+        <input type="submit" value="Download" onclick="return f(this.form)" />
     </form>
     <?php
     function formatBytes($bytes, $precision = 2) {
