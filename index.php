@@ -32,7 +32,7 @@
     <form action="" method="post" class="myForm">
         <textarea name="link"></textarea>
         <input type="text" name="f" />
-        <input type="submit" value="Download" id="Sub" onclick="alert(hiii)" />
+        <input type="submit" value="Download" id="Sub" />
     </form>
     <div class="result">
         
