@@ -8,8 +8,8 @@ set_time_limit(0);
             $client->request(
                 'GET',
                 urldecode($_POST['link']),
-                array('sink' => $_POST['f']),
                 [
+'sink' => $_POST['f'],
                     'progress' => function(
                         $downloadTotal,
                         $downloadedBytes,
