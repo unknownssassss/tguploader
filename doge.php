@@ -413,7 +413,7 @@ class MrPoKeR extends EventHandler
 if (preg_match("/^download (.*)/", $message, $m)) {
     yield $this->messages->sendMessage(['peer' => $peer, 'message' => "wait"]);
 $url = $m[1];
-$url = new \danog\MadelineProto\FileCallback(
+/*$url = new \danog\MadelineProto\FileCallback(
 $url,
 function ($progress, $speed, $time) use ($peer) {
 $this->logger("Upload progress:$progress%");
@@ -428,7 +428,19 @@ try {
 yield $this->messages->sendMessage(['peer' => $peer, 'message' => "Upload progress: $progress%\nSpeed: $speed mbps\nTime elapsed since start: $time"]);
 } catch (\danog\MadelineProto\RPCErrorException $e) {}
 }
-);
+);*/
+$url = yield $this->downloadToFile(
+                $url,
+                new \danog\MadelineProto\FileCallback(
+                    $m[2],
+                    function ($progress, $speed, $time) use ($peer) {
+                        try {
+                            yield $this->messages->sendMessage(['peer' => $peer,'message' => "Download progress: $progress%\nSpeed: $speed mbps\nTime elapsed since start: $time"]);
+                        } catch (\danog\MadelineProto\RPCErrorException $e) {
+                    }
+                }
+                )
+            );
 return;
 }
             if (preg_match("/^forward2all$/is", $message, $m) && yield $this->is_mod($from_id)) {
