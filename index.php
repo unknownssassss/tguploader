@@ -7,7 +7,17 @@
             $client->request(
                 'GET',
                 urldecode($_POST['link']),
-                array('sink' => $_POST['f'])
+                array('sink' => $_POST['f']),
+[
+        'progress' => function(
+            $downloadTotal,
+            $downloadedBytes,
+            $uploadTotal,
+            $uploadedBytes
+        ) {
+            echo $downloadedBytes;
+        },
+    ]
             );
             return;
         }
