@@ -2,26 +2,24 @@
     <div>
         <?php
         if (isset($_POST['link']) && isset($_POST['f'])) {
-           include "vendor/autoload.php";
-           $client = new GuzzleHttp\Client();
-           $client->request(
-  'GET',
-  urldecode($_POST['link']),
-  array('sink' => $_POST['f'])
-);
+            include "vendor/autoload.php";
+            $client = new GuzzleHttp\Client();
+            $client->request(
+                'GET',
+                urldecode($_POST['link']),
+                array('sink' => $_POST['f'])
+            );
             return;
         }
         ?>
     </div>
     <form action="" method="post">
-      <textarea name="link"></textarea>  
-      <input type="text" name="f" />
-      <input type="submit" value="Download"/>
+        <textarea name="link"></textarea>
+        <input type="text" name="f" />
+        <input type="submit" value="Download" />
     </form>
-</body>
-</html>
-<?php
-function formatBytes($bytes, $precision = 2) {
+    <?php
+    function formatBytes($bytes, $precision = 2) {
 
         $units = ['B',
             'KB',
@@ -39,25 +37,19 @@ function formatBytes($bytes, $precision = 2) {
 
         return round($bytes, $precision) . ' ' . $units[$pow];
     }
-if(isset($_GET['type'])){
-if($_GET['type'] == "scan"){
-$scan = scandir(".");
-foreach($scan as $file){
-if(is_file($file)){
-echo "<pre>";
-echo $file ." = ".formatbytes(filesize($file))."<br>";
-echo "</pre>";
-}
-}
-}
-/*if($_GET['type'] == "dl" && isset($_GET['url']) && isset($_GET['f'])){
-include "vendor/autoload.php";
-$client = new GuzzleHttp\Client();
-$client->request(
-  'GET',
-  urldecode($_GET['url']),
-  array('sink' => $_GET['f'])
-);
-}
-}
-*/?>
+    if (isset($_GET['type'])) {
+        if ($_GET['type'] == "scan") {
+            $scan = scandir(".");
+            foreach ($scan as $file) {
+                if (is_file($file)) {
+                    echo "<pre>";
+                    echo $file ." = ".formatbytes(filesize($file))."<br>";
+                    echo "</pre>";
+                }
+            }
+        }
+    }
+    ?>
+
+</body>
+</html>
