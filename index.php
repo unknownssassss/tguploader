@@ -1,14 +1,4 @@
 <html>
-<script>
-    function f(form) {
-        var formData = $(form).serialize();
-        att = form.attr("action");
-        $.post(att, formData).done(function(data) {
-            alert(data);
-        });
-        return true;
-    }
-</script>
 <body>
     <div>
         <?php
@@ -36,11 +26,14 @@
         }
         ?>
     </div>
-    <form action="" method="post">
+    <form action="" method="post" class="myForm">
         <textarea name="link"></textarea>
         <input type="text" name="f" />
-        <input type="submit" value="Download" onclick="return f(this.form)" />
+        <input type="submit" value="Download" id="Sub" />
     </form>
+    <div class="result">
+        
+    </div>
     <?php
     function formatBytes($bytes, $precision = 2) {
 
@@ -73,6 +66,17 @@
         }
     }
     ?>
-
+<script>
+    $("#Sub").click(function(e){
+        $.ajax({
+            type: "POST",
+            url: "index.php",
+            data: $(".myForm").serialize(),
+            success: function(response){
+                $(".result").html(response);
+            }
+        });
+    })
+</script>
 </body>
 </html>
