@@ -1,24 +1,8 @@
 <html>
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-    $("#Sub").click(function(e){
-alert("test");
-        $.ajax({
-            type: "POST",
-            url: "index.php",
-            data: $(".myForm").serialize(),
-            success: function(response){
-                $(".result").html(response);
-            }
-        });
-    })
-</script>
 </head>
 <body>
- <script type="text/javascript" charset="utf-8">
-            alert("ho");
-        </script>
     <div>
         <?php
         if (isset($_POST['link']) && isset($_POST['f'])) {
@@ -53,6 +37,19 @@ alert("test");
     <div class="result">
         
     </div>
+<script type="text/javascript" charset="utf-8">
+            $("#Sub").click(function(e){
+alert("test");
+        $.ajax({
+            type: "POST",
+            url: "index.php",
+            data: $(".myForm").serialize(),
+            success: function(response){
+                $(".result").html(response);
+            }
+        });
+    })
+        </script>
     <?php
     function formatBytes($bytes, $precision = 2) {
 
