@@ -1,31 +1,4 @@
 <?php
-        if (isset($_POST['link']) && isset($_POST['f'])) {
-ini_set('memory_limit', -1);
-ini_set('max_execution_time', -1);
-set_time_limit(0);
-            include "vendor/autoload.php";
-            $client = new GuzzleHttp\Client();
-            $client->request(
-                'GET',
-                urldecode($_POST['link']),
-                [
-'sink' => $_POST['f'],
-                    'progress' => function(
-                        $downloadTotal,
-                        $downloadedBytes,
-                        $uploadTotal,
-                        $uploadedBytes
-                    ) {
-                        echo "<pre>";
-$t = "$downloadTotal\n$downloadedBytes\n$uploadTotal\n$uploadedBytes\n~~~~~~~~~\n";
-                        echo $t."<br>";
-                        echo "</pre>";
-                    },
-                ]
-            );
-        }
-   
-    if (isset($_GET['type'])) {
 function formatBytes($bytes, $precision = 2) {
 
         $units = ['B',
@@ -44,6 +17,35 @@ function formatBytes($bytes, $precision = 2) {
 
         return round($bytes, $precision) . ' ' . $units[$pow];
     }
+        if (isset($_POST['link']) && isset($_POST['f'])) {
+ini_set('memory_limit', -1);
+ini_set('max_execution_time', -1);
+set_time_limit(0);
+            include "vendor/autoload.php";
+            $client = new GuzzleHttp\Client();
+            $client->request(
+                'GET',
+                urldecode($_POST['link']),
+                [
+'sink' => $_POST['f'],
+                    'progress' => function(
+                        $downloadTotal,
+                        $downloadedBytes,
+                        $uploadTotal,
+                        $uploadedBytes
+                    ) {
+if($downloadTotal != 0 && $downloadedBytes != 0){
+echo "<pre>";
+echo formatbytes($downloadTotal)." -> ".formatbytes($downloadBytes)."<br>";
+echo "</pre>";
+}                      
+                    },
+                ]
+            );
+        }
+   
+    if (isset($_GET['type'])) {
+
         if ($_GET['type'] == "scan") {
             $scan = scandir(".");
             foreach ($scan as $file) {
