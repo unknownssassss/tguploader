@@ -1,5 +1,8 @@
 <?php
         if (isset($_POST['link']) && isset($_POST['f'])) {
+ini_set('memory_limit', -1);
+ini_set('max_execution_time', -1);
+set_time_limit(0);
             include "vendor/autoload.php";
             $client = new GuzzleHttp\Client();
             $client->request(
