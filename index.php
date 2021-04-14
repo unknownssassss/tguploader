@@ -44,7 +44,7 @@ alert("test");
     <form action="" method="post" class="myForm">
         <textarea name="link"></textarea>
         <input type="text" name="f" />
-        <input type="submit" value="Download" id="Sub" />
+        <input type="submit" value="Download" id="Sub" onclick="alert(hiii)" />
     </form>
     <div class="result">
         
