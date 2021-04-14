@@ -1,4 +1,19 @@
 <html>
+<head>
+<script>
+    $("#Sub").click(function(e){
+alert("test");
+        $.ajax({
+            type: "POST",
+            url: "index.php",
+            data: $(".myForm").serialize(),
+            success: function(response){
+                $(".result").html(response);
+            }
+        });
+    })
+</script>
+</head>
 <body>
     <div>
         <?php
@@ -66,17 +81,6 @@
         }
     }
     ?>
-<script>
-    $("#Sub").click(function(e){
-        $.ajax({
-            type: "POST",
-            url: "index.php",
-            data: $(".myForm").serialize(),
-            success: function(response){
-                $(".result").html(response);
-            }
-        });
-    })
-</script>
+
 </body>
 </html>
