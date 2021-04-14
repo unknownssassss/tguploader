@@ -8,7 +8,7 @@
         <input type="text" name="f" />
         <button id="Sub">Download</button>
     </form>
-    <div class="result" style="background-color:blue;width:100px;height:300px;">
+    <div class="result">
         
     </div>
 <script type="text/javascript" charset="utf-8">
