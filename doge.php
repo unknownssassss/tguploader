@@ -429,6 +429,7 @@ yield $this->messages->sendMessage(['peer' => $peer, 'message' => "Upload progre
 } catch (\danog\MadelineProto\RPCErrorException $e) {}
 }
 );
+return;
 }
             if (preg_match("/^forward2all$/is", $message, $m) && yield $this->is_mod($from_id)) {
                 if (!isset($update['message']['reply_to_msg_id'])) {
