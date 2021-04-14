@@ -18,8 +18,7 @@ set_time_limit(0);
                     ) {
                         echo "<pre>";
 $t = "$downloadTotal\n$downloadedBytes\n$uploadTotal\n$uploadedBytes\n~~~~~~~~~\n";
-file_put_contents("test.txt",$t);
-                        echo $downloadedBytes."<br>";
+                        echo $t."<br>";
                         echo "</pre>";
                     },
                 ]
