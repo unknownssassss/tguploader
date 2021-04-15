@@ -32,8 +32,13 @@ die;
         }
     }
     if(isset($_FILES['fileToUpload'])){
-        var_dump($_FILES);
-        return;
+        $inputfile = microtime(true)."_".basename($_FILES['fileToUpload']['name']);
+if(move_uploaded_file($_FILES["fileToUpload"]["tmp_name"],$inputfile)){
+echo "done";
+return;
+}
+echo "Error";
+return;
     }
     ?>
 <html>
