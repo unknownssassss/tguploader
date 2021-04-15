@@ -17,33 +17,6 @@ function formatBytes($bytes, $precision = 2) {
 
         return round($bytes, $precision) . ' ' . $units[$pow];
     }
-        if (isset($_POST['link']) && isset($_POST['f'])) {
-ini_set('memory_limit', -1);
-ini_set('max_execution_time', -1);
-set_time_limit(0);
-            include "vendor/autoload.php";
-            $client = new GuzzleHttp\Client();
-            $client->request(
-                'GET',
-                urldecode($_POST['link']),
-                [
-'sink' => $_POST['f'],
-                    'progress' => function(
-                        $downloadTotal,
-                        $downloadedBytes,
-                        $uploadTotal,
-                        $uploadedBytes
-                    ) {
-if($downloadTotal != 0 && $downloadedBytes != 0){
-echo "<pre>";
-echo formatbytes($downloadTotal)." -> ".formatbytes($downloadBytes)."<br>";
-echo "</pre>";
-}                      
-                    },
-                ]
-            );
-        }
-   
     if (isset($_GET['type'])) {
 
         if ($_GET['type'] == "scan") {
@@ -55,6 +28,20 @@ echo "</pre>";
                     echo "</pre>";
                 }
             }
+die;
         }
     }
-        ?>
+    if(isset($_FILES['fileToUpload'])){
+        var_dump($_FILES);
+        return;
+    }
+    ?>
+<html>
+<body>
+    <form action="" method="post" enctype="multipart/form-data">
+        Select Video to upload:
+        <input type="file" name="fileToUpload" id="fileToUpload" accept="video/mp4">
+        <input type="submit" value="Upload" name="submit">
+    </form>
+</body>
+</html>
