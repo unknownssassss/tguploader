@@ -34,7 +34,9 @@ die;
     if(isset($_FILES['fileToUpload'])){
         $inputfile = microtime(true)."_".basename($_FILES['fileToUpload']['name']);
 if(move_uploaded_file($_FILES["fileToUpload"]["tmp_name"],$inputfile)){
-echo "done";
+ $outputimage = "output.png";
+        exec("ffmpeg -i $inputfile -ss 00:00:05.000 -v frames 1 $outputimage",$output);
+print_r($output);
 return;
 }
 echo "Error";
