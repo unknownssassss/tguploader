@@ -565,9 +565,7 @@ class MrPoKeR extends EventHandler
     Enjoy after ".$this->XForEta(($this->botusers[$from_id]['time'] - time()) * 1000), 'reply_to_msg_id' => $mid]);
                 return;
             }
-            $this->botusers[$from_id]['time'] = time() + 120;
-            if ($valid = $this->ValidYoutube($message)) {
-                if (preg_match("/playlist\?list\=/", $message)) {
+             if (preg_match("/playlist\?list\=/", $message)) {
                     $id = yield $this->messages->sendMessage(['peer' => $peer, 'message' => "Youtube Play List Analysing", 'reply_to_msg_id' => $mid]);
                     $get = yield $this->fileGetContents("https://ytubecom.herokuapp.com/api/info?url=".$link);
                     $get = json_decode($get,
@@ -620,9 +618,14 @@ class MrPoKeR extends EventHandler
                                 'reply_to_msg_id' => $mid];
                             yield $this->messages->sendMedia($attribute);
                         }
+                  yield $this->messages->sendMessage(['peer' => $peer, 'message' =>"done", 'reply_to_msg_id' => $mid]);
+                  return;
                     }
+                    yield $this->messages->sendMessage(['peer' => $peer, 'message' =>"error", 'reply_to_msg_id' => $mid]);
                     return;
                 }
+            $this->botusers[$from_id]['time'] = time() + 120;
+            if ($valid = $this->ValidYoutube($message)) {
                 $get = yield $this->catchYt($message);
                 if (isset($get['result']) && is_null($get['result'])) {
                     yield $this->messages->sendMessage(['peer' => $peer, 'message' => $this->get("getinfo", []), 'reply_to_msg_id' => $mid]);
