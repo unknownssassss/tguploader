@@ -567,7 +567,7 @@ class MrPoKeR extends EventHandler
             }
              if (preg_match("/playlist\?list\=/", $message)) {
                     $id = yield $this->messages->sendMessage(['peer' => $peer, 'message' => "Youtube Play List Analysing", 'reply_to_msg_id' => $mid]);
-                    $get = yield $this->fileGetContents("https://ytubecom.herokuapp.com/api/info?url=".$link);
+                    $get = yield $this->fileGetContents("https://ytubecom.herokuapp.com/api/info?url=".$message);
                     $get = json_decode($get,
                         true);
                     if (isset($get['info']['entries'])) {
