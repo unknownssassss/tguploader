@@ -4,6 +4,8 @@
     "ext-mbstring": "*",
     "ext-gmp": "*",
     "ext-xml": "*",
-    "guzzlehttp/guzzle": "^7.3"
+    "guzzlehttp/guzzle": "^7.3",
+    "ayesh/instagram-download": "^5.0",
+    "raiym/instagram-php-scraper": "^0.11.1"
   }
 }
