@@ -633,8 +633,8 @@ class MrPoKeR extends EventHandler
                                         'round_message' => false,
                                         'supports_streaming' => true,
                                         'duration' => $urls['duration'] ?: 0,
-                                        'w' => 1280,
-                                        'h' => 720],['_' => 'documentAttributeFilename', 'file_name' =>$name]
+                                        'w' => $urls['width'] ?: 1280,
+                                        'h' => $urls['height'] ?: 720],['_' => 'documentAttributeFilename', 'file_name' =>$name]
                                 ]],
                             'message' => "$name\n@skyteam",
                             'reply_to_msg_id' => $mid];
