@@ -622,7 +622,7 @@ class MrPoKeR extends EventHandler
                             }
                         });
                         $name = isset($urls['title']) ? $urls['title'] : md5(microtime(true));
-                        $name .= ".".isset($urls['ext']) ? $urls['ext'] : ".mp4";
+                        $name .= isset($urls['ext']) ? ".".$urls['ext'] : ".mp4";
                         $thumb = md5($urls['id'].".png");
                         $attribute = ['peer' => $peer,
                             'media' => ['_' => 'inputMediaUploadedDocument',
