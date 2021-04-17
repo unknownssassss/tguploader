@@ -625,7 +625,7 @@ class MrPoKeR extends EventHandler
                         $attribute = ['peer' => $peer,
                             'media' => ['_' => 'inputMediaUploadedDocument',
                                 'file' => $url,
-                                'thumb' => file_exists($thumb) ? $thumb : "https://gettgfile.herokuapp.com/egiiibfibbf_eeihachcfi/400098000119_385156.jpg",
+                                'thumb' => isset($urls['thumbnail']) ? $urls['thumbnail'] : "https://gettgfile.herokuapp.com/egiiibfibbf_eeihachcfi/400098000119_385156.jpg",
                                 'attributes' => [
                                     ['_' => 'documentAttributeVideo',
                                         'round_message' => false,
