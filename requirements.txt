@@ -1,1 +1,12 @@
-git+https://github.com/dvingerh/PyInstaLive.git@3.2.4
+aiohttp
+beautifulsoup4
+hachoir
+sqlalchemy
+psycopg2-binary
+numpy
+Pillow
+pyrogram==1.0.7
+requests
+tgcrypto
+#youtube-dl
+git+https://github.com/prgofficial/YouTubeDL
