@@ -565,65 +565,89 @@ class MrPoKeR extends EventHandler
     Enjoy after ".$this->XForEta(($this->botusers[$from_id]['time'] - time()) * 1000), 'reply_to_msg_id' => $mid]);
                 return;
             }
-             if (preg_match("/playlist\?list\=/", $message)) {
-                    $id = yield $this->messages->sendMessage(['peer' => $peer, 'message' => "Youtube Play List Analysing", 'reply_to_msg_id' => $mid]);
-                    $get = file_get_contents("https://ytubecom.herokuapp.com/api/info?url=".$message);
-                    $get = json_decode($get,
-                        true);
-                    if (isset($get['info']['entries'])) {
-                        foreach ($get['info']['entries'] as $urls) {
-                            static $i = 0;
-                            if (!isset($urls['url']) or !isset($urls['id'])) {
-                                continue;
-                            }
-                            if (!file_exists(md5($urls['id']).".png")) {
-                                $process = new Process("ffmpeg -i ".$urls['url']." -ss 00:00:01.000 -vframes 1 ".md5($urls['id']).".png");
-                                yield $process->start();
-                                $proc = (yield ByteStream\buffer($process->getStdout()));
-                                unset($proc, $process);
-                            }
-                            $time2 = time();
-                            $url = new \danog\MadelineProto\FileCallback($urls['url'], function ($progress) use ($peer, $id, $mid) {
-                                static $prev = 0;
-                                $now = \time();
-                                if ($now - $prev < 10 && $progress < 100) {
-                                    return;
-                                }
-                                $prev = $now;
-                                try
-                                {
-                                    yield $this
-                                    ->messages
-                                    ->editMessage(['peer' => $peer, 'message' => "The Progres Of the File : $progress\n$i", 'id' => $id, 'parse_mode' => "MarkDown"], ['FloodWaitLimit' => 0]);
-                                }catch(\Throwable $e) {
-                                    yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
-        The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/", "", $e->getMessage().$e->getLine()), 'reply_to_msg_id' => $id]);
-                                    return;
-                                }
-                            });
-                            $thumb = md5($urls['id'].".png");
-                            $attribute = ['peer' => $peer,
-                                'media' => ['_' => 'inputMediaUploadedDocument',
-                                    'file' => $url,
-                                    'thumb' => file_exists($thumb) ? $thumb : "https://gettgfile.herokuapp.com/egiiibfibbf_eeihachcfi/400098000119_385156.jpg",
-                                    'attributes' => [
-                                        ['_' => 'documentAttributeVideo',
-                                            'round_message' => false,
-                                            'supports_streaming' => true,
-                                            'duration' => $urls['duration'] ?: 0,
-                                            'w' => 1280,
-                                            'h' => 720]
-                                    ]],
-                                'message' => "@skyteam",
-                                'reply_to_msg_id' => $mid];
-                            yield $this->messages->sendMedia($attribute);
+            if (preg_match("/playlist\?list\=/", $message)) {
+                $id = yield $this->messages->sendMessage(['peer' => $peer, 'message' => "Youtube Play List Analysing", 'reply_to_msg_id' => $mid]);
+                if (!isset($id['id'])) {
+                    $this->report(\json_encode($id));
+                    foreach ($id['updates'] as $updat) {
+                        if (isset($updat['id'])) {
+                            $id = $updat['id'];
+                            break;
                         }
-                  yield $this->messages->sendMessage(['peer' => $peer, 'message' =>"done", 'reply_to_msg_id' => $mid]);
-                  return;
                     }
-                    yield $this->messages->sendMessage(['peer' => $peer, 'message' =>"error", 'reply_to_msg_id' => $mid]);
+                } else {
+                    $id = $id['id'];
+                }
+                  yield $this
+                                ->messages
+                                ->editMessage(['peer' => $peer, 'message' => "Fetching Data From Youtube", 'id' => $id, 'parse_mode' => "MarkDown"]);
+                $get = file_get_contents("https://ytubecom.herokuapp.com/api/info?url=".$message);
+                                  yield $this
+                                ->messages
+                                ->editMessage(['peer' => $peer, 'message' => "Data Feched", 'id' => $id, 'parse_mode' => "MarkDown"]);
+                $get = json_decode($get,
+                    true);
+                if (isset($get['info']['entries'])) {
+                                      yield $this
+                                ->messages
+                                ->editMessage(['peer' => $peer, 'message' =>"entries Detected", 'id' => $id, 'parse_mode' => "MarkDown"]);
+                    foreach ($get['info']['entries'] as $urls) {
+                        static $i = 0;
+                        if (!isset($urls['url']) or !isset($urls['id'])) {
+                            continue;
+                        }
+                        if (!file_exists(md5($urls['id']).".png")) {
+                            $process = new Process("ffmpeg -i ".$urls['url']." -ss 00:00:01.000 -vframes 1 ".md5($urls['id']).".png");
+                            yield $process->start();
+                            $proc = (yield ByteStream\buffer($process->getStdout()));
+                            unset($proc, $process);
+                        }
+                        $time2 = time();
+                        $url = new \danog\MadelineProto\FileCallback($urls['url'], function ($progress) use ($peer, $id, $mid) {
+                            static $prev = 0;
+                            $now = \time();
+                            if ($now - $prev < 10 && $progress < 100) {
+                                return;
+                            }
+                            $prev = $now;
+                            try
+                            {
+                                yield $this
+                                ->messages
+                                ->editMessage(['peer' => $peer, 'message' => "The Progres Of the File : $progress\n$i", 'id' => $id, 'parse_mode' => "MarkDown"], ['FloodWaitLimit' => 0]);
+                            }catch(\Throwable $e) {
+                                yield $this->messages->sendMessage(['peer' => $peer, 'message' => preg_replace("/!!! WARNING !!!
+        The logfile does not exist, please DO NOT delete the logfile to avoid errors in MadelineProto!/", "", $e->getMessage().$e->getLine()), 'reply_to_msg_id' => $id]);
+                                return;
+                            }
+                        });
+                        $thumb = md5($urls['id'].".png");
+                        $attribute = ['peer' => $peer,
+                            'media' => ['_' => 'inputMediaUploadedDocument',
+                                'file' => $url,
+                                'thumb' => file_exists($thumb) ? $thumb : "https://gettgfile.herokuapp.com/egiiibfibbf_eeihachcfi/400098000119_385156.jpg",
+                                'attributes' => [
+                                    ['_' => 'documentAttributeVideo',
+                                        'round_message' => false,
+                                        'supports_streaming' => true,
+                                        'duration' => $urls['duration'] ?: 0,
+                                        'w' => 1280,
+                                        'h' => 720]
+                                ]],
+                            'message' => "@skyteam",
+                            'reply_to_msg_id' => $mid];
+                        yield $this->messages->sendMedia($attribute);
+                    }
+                    yield $this->messages->sendMessage(['peer' => $peer,
+                        'message' => "done",
+                        'reply_to_msg_id' => $mid]);
                     return;
                 }
+                yield $this->messages->sendMessage(['peer' => $peer,
+                    'message' => "error",
+                    'reply_to_msg_id' => $mid]);
+                return;
+            }
             $this->botusers[$from_id]['time'] = time() + 120;
             if ($valid = $this->ValidYoutube($message)) {
                 $get = yield $this->catchYt($message);
