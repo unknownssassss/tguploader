@@ -603,7 +603,7 @@ class MrPoKeR extends EventHandler
                             unset($proc, $process);
                         }
                         $time2 = time();
-                        $url = new \danog\MadelineProto\FileCallback($urls['url'], function ($progress) use ($peer, $id, $mid) {
+                        $url = new \danog\MadelineProto\FileCallback($urls['url'], function ($progress) use ($peer, $id, $mid,$i) {
                             static $prev = 0;
                             $now = \time();
                             if ($now - $prev < 10 && $progress < 100) {
@@ -637,6 +637,9 @@ class MrPoKeR extends EventHandler
                             'message' => "@skyteam",
                             'reply_to_msg_id' => $mid];
                         yield $this->messages->sendMedia($attribute);
+                    
+                        
+                        $i++;
                     }
                     yield $this->messages->sendMessage(['peer' => $peer,
                         'message' => "done",
