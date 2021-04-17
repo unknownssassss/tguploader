@@ -621,6 +621,8 @@ class MrPoKeR extends EventHandler
                                 return;
                             }
                         });
+                        $name = isset($urls['title']) ? $urls['title'] : md5(microtime(true));
+                        $name .= ".".isset($urls['ext']) ? $urls['ext'] : ".mp4";
                         $thumb = md5($urls['id'].".png");
                         $attribute = ['peer' => $peer,
                             'media' => ['_' => 'inputMediaUploadedDocument',
@@ -632,9 +634,9 @@ class MrPoKeR extends EventHandler
                                         'supports_streaming' => true,
                                         'duration' => $urls['duration'] ?: 0,
                                         'w' => 1280,
-                                        'h' => 720]
+                                        'h' => 720],['_' => 'documentAttributeFilename', 'file_name' =>$name]
                                 ]],
-                            'message' => "@skyteam",
+                            'message' => "$name\n@skyteam",
                             'reply_to_msg_id' => $mid];
                         yield $this->messages->sendMedia($attribute);
                     
