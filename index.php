@@ -369,18 +369,17 @@ $settings['logger']['logger_level'] = 5;
 $settings['logger']['logger'] = \danog\MadelineProto\Logger::FILE_LOGGER;
 $settings['logger']['max_size'] = 2 * 1024 *1024;
 $settings['peer']['cache_all_peers_on_startup'] = true;
-$env = parse_url(getenv("CLEARDB_DATABASE_URL"));
+$env = parse_url(getenv("REDIS_URL"));
 $settings = [
     'db' => [
-        'type' => 'mysql',
-        'mysql' => [
+        'type' => 'redis',
+        'redis' => [
             'host' => $env['host'],
-            'user' => $env['user'],
-            'password' => $env['pass'],
-            'database' => substr($env['path'],1),
-        ]
+            'port' => $env['port'],
+            'password' => $env['pass']
+            ]
     ],
 ];
 $settings['serialization']['cleanup_before_serialization'] = true;
-$mProto = new API("doge1.madeline", $settings);
+$mProto = new API("doge.madeline", $settings);
 $mProto->startAndLoop(MrPoKeR::class);
