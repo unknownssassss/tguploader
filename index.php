@@ -375,7 +375,6 @@ $settings = [
         'type' => 'mysql',
         'mysql' => [
             'host' => $env['host'],
-            'port' => '3306',
             'user' => $env['user'],
             'password' => $env['pass'],
             'database' => substr($env['path'],1),
