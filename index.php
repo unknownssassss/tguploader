@@ -374,7 +374,7 @@ $settings = [
     'db' => [
         'type' => 'redis',
         'redis' => [
-            'host' => $env['host'],
+            'host' => "redis://".$env['host'],
             'port' => $env['port'],
             'password' => $env['pass']
             ]
