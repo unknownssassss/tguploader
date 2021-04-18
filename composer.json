@@ -7,6 +7,7 @@
     "guzzlehttp/guzzle": "^7.3",
     "ayesh/instagram-download": "^5.0",
     "raiym/instagram-php-scraper": "^0.11.1",
-    "phpfastcache/phpfastcache": "^8.0"
+    "phpfastcache/phpfastcache": "^8.0",
+    "amphp/mysql": "^2.1"
   }
 }
