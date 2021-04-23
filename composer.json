@@ -3,6 +3,7 @@
     "php": "^7.4.0",
     "ext-mbstring": "*",
     "ext-gmp": "*",
+    "ext-rar": "*",
     "ext-xml": "*",
     "guzzlehttp/guzzle": "^7.3",
     "ayesh/instagram-download": "^5.0",
