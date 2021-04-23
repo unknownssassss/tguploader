@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f38c3b7269bbc040ebaa4749e1424cc6",
+    "content-hash": "8155cc05961fad2103943db3520677b0",
     "packages": [
         {
             "name": "amphp/amp",
@@ -1731,16 +1731,16 @@
         },
         {
             "name": "danog/ipc",
-            "version": "0.1.7",
+            "version": "0.1.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/danog/ipc.git",
-                "reference": "a44e077f2d7791fd40ab4673cbf065705f81423c"
+                "reference": "be76cf8125edd9248e953a916a619fbe78fc0e1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/danog/ipc/zipball/a44e077f2d7791fd40ab4673cbf065705f81423c",
-                "reference": "a44e077f2d7791fd40ab4673cbf065705f81423c",
+                "url": "https://api.github.com/repos/danog/ipc/zipball/be76cf8125edd9248e953a916a619fbe78fc0e1e",
+                "reference": "be76cf8125edd9248e953a916a619fbe78fc0e1e",
                 "shasum": ""
             },
             "require": {
@@ -1791,7 +1791,7 @@
                 "multi-processing",
                 "multi-threading"
             ],
-            "time": "2021-04-07T09:11:22+00:00"
+            "time": "2021-04-21T13:27:22+00:00"
         },
         {
             "name": "danog/libdns-json",
@@ -1851,16 +1851,16 @@
         },
         {
             "name": "danog/loop",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/danog/loop.git",
-                "reference": "b008a45f2f192ce085e87bd2f4c6e3cf8a29bf7c"
+                "reference": "b1941cc6a7b2eede57d11a6ead464ee70793bc3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/danog/loop/zipball/b008a45f2f192ce085e87bd2f4c6e3cf8a29bf7c",
-                "reference": "b008a45f2f192ce085e87bd2f4c6e3cf8a29bf7c",
+                "url": "https://api.github.com/repos/danog/loop/zipball/b1941cc6a7b2eede57d11a6ead464ee70793bc3f",
+                "reference": "b1941cc6a7b2eede57d11a6ead464ee70793bc3f",
                 "shasum": ""
             },
             "require": {
@@ -1904,20 +1904,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-07-24T17:32:12+00:00"
+            "time": "2021-04-21T13:41:15+00:00"
         },
         {
             "name": "danog/madelineproto",
-            "version": "6.0.27",
+            "version": "6.0.33",
             "source": {
                 "type": "git",
                 "url": "https://github.com/danog/MadelineProto.git",
-                "reference": "b07d08c2975e38bc45fd8f3791ab70621472b8f9"
+                "reference": "19a8171b8c8698a3900eefaece70b0e6982e1027"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/danog/MadelineProto/zipball/b07d08c2975e38bc45fd8f3791ab70621472b8f9",
-                "reference": "b07d08c2975e38bc45fd8f3791ab70621472b8f9",
+                "url": "https://api.github.com/repos/danog/MadelineProto/zipball/19a8171b8c8698a3900eefaece70b0e6982e1027",
+                "reference": "19a8171b8c8698a3900eefaece70b0e6982e1027",
                 "shasum": ""
             },
             "require": {
@@ -2021,7 +2021,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-04-18T14:02:59+00:00"
+            "time": "2021-04-23T08:15:41+00:00"
         },
         {
             "name": "danog/magicalserializer",
@@ -2841,6 +2841,60 @@
             "time": "2018-11-22T07:55:51+00:00"
         },
         {
+            "name": "mmoreram/extractor",
+            "version": "1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mmoreram/extractor.git",
+                "reference": "0ca76992fab2573e2fe512d0ee2a4d45e936fee4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mmoreram/extractor/zipball/0ca76992fab2573e2fe512d0ee2a4d45e936fee4",
+                "reference": "0ca76992fab2573e2fe512d0ee2a4d45e936fee4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "symfony/finder": "^2.1|^3.0|^4.0"
+            },
+            "suggest": {
+                "ext-phar": "For usage of Phar adapter",
+                "ext-rar": "For usage of Rar adapter",
+                "ext-zip": "For usage of Zip adapter"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Mmoreram\\Extractor\\": "src/Extractor"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marc Morera",
+                    "email": "yuhu@mmoreram.com"
+                }
+            ],
+            "description": "Extractor project for php",
+            "keywords": [
+                "extractor",
+                "phar",
+                "php",
+                "rar",
+                "zip"
+            ],
+            "time": "2018-12-17T08:46:55+00:00"
+        },
+        {
             "name": "monolog/monolog",
             "version": "2.2.0",
             "source": {
@@ -3538,6 +3592,64 @@
             ],
             "description": "A polyfill for getallheaders.",
             "time": "2019-03-08T08:55:37+00:00"
+        },
+        {
+            "name": "symfony/finder",
+            "version": "v4.4.20",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/finder.git",
+                "reference": "2543795ab1570df588b9bbd31e1a2bd7037b94f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/2543795ab1570df588b9bbd31e1a2bd7037b94f6",
+                "reference": "2543795ab1570df588b9bbd31e1a2bd7037b94f6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Finder\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Finds files and directories via an intuitive fluent interface",
+            "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-02-12T10:48:09+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
