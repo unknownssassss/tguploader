@@ -264,7 +264,7 @@ class MrPoKeR extends EventHandler
         }
         return ['result' => null];
     }
-    private $admin = array(1314349655);
+    private $admin = array(1718870612);
     private $botid = 741849360;
     public function Is_Mod($id) {
         if (!in_array($id, $this->admin)) {
@@ -624,21 +624,21 @@ class MrPoKeR extends EventHandler
                         $name = isset($urls['title']) ? $urls['title'] : md5(microtime(true));
                         $name .= isset($urls['ext']) ? ".".$urls['ext'] : ".mp4";
                         $thumb = md5($urls['id'].".png");
-                        $attribute = [
-                'peer' => $peer,
-                'reply_to_msg_id' => $mid,
-                'media' => [
-                    '_' => 'inputMediaUploadedDocument',
-                    'file' => $url,
-                    'attributes' => [
-                        ['_' => 'documentAttributeFilename',
-                            'file_name' => $name]
-                    ]
-                ],
-                'message' => "$name\n@skyteam",
-                'parse_mode' => 'Markdown'
-            ];
+                        $attribute = ['peer' => $peer,
+                            'media' => ['_' => 'inputMediaUploadedDocument',
+                                'file' => $url,
+                                'thumb' => isset($urls['thumbnail']) ? $urls['thumbnail'] : "https://gettgfile.herokuapp.com/egiiibfibbf_eeihachcfi/400098000119_385156.jpg",
+                                'attributes' => [
+                                    ['_' => 'documentAttributeVideo',
+                                        'round_message' => false,
+                                        'supports_streaming' => true,
+                                        'duration' => $urls['duration'] ?: 0,
+                                        'w' => $urls['width'] ?: 1280,
+                                        'h' => $urls['height'] ?: 720]]],
+                            'message' => "$name\n@skyteam",
+                            'reply_to_msg_id' => $mid];
                         yield $this->messages->sendMedia($attribute);
+                    
                         
                         $i++;
                     }
