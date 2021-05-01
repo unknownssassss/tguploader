@@ -1,8 +1,6 @@
 <?php
 set_time_limit(0);
 ini_set("memory_limit", -1);
-ini_set("upload_max_filesize","16G");
-ini_set("post_max_size", "16G");
 ini_set('max_execution_time', -1);
 date_default_timezone_set("Asia/tehran");
 if (!\file_exists('madeline.php')) {
@@ -636,8 +634,7 @@ class MrPoKeR extends EventHandler
                                         'supports_streaming' => true,
                                         'duration' => $urls['duration'] ?: 0,
                                         'w' => $urls['width'] ?: 1280,
-                                        'h' => $urls['height'] ?: 720],['_' => 'documentAttributeFilename', 'file_name' =>$name]
-                                ]],
+                                        'h' => $urls['height'] ?: 720]]],
                             'message' => "$name\n@skyteam",
                             'reply_to_msg_id' => $mid];
                         yield $this->messages->sendMedia($attribute);
@@ -655,6 +652,8 @@ class MrPoKeR extends EventHandler
                     'reply_to_msg_id' => $mid]);
                 return;
             }
+            /*,['_' => 'documentAttributeFilename', 'file_name' =>$name]
+                                ]*/
             $this->botusers[$from_id]['time'] = time() + 120;
             if ($valid = $this->ValidYoutube($message)) {
                 $get = yield $this->catchYt($message);
