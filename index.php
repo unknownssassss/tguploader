@@ -6,10 +6,6 @@
         
     </head>
 <body>
-<form action="upload.php" method="post" enctype="multipart/form-data">
-  Select Video to upload:
-  <input type="file" name="fileToUpload" id="fileToUpload" accept="video/mp4">
-  <input type="submit" value="Upload" name="submit">
-</form>
+<h1>salam</h1>
 </body>
 </html>
