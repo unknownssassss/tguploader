@@ -1,23 +1,20 @@
 <html>
     <head>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <meta name="exoclick-site-verification" content="560e191e726e6223cc7729bd772cb6d5" />
         <title>my web</title>
-        
+       <script type="text/javascript">
+    (function(){
+    var now = new Date();
+    var head = document.getElementsByTagName('head')[0];
+    var script = document.createElement('script');
+    script.async = true;
+    var script_address = 'https://cdn.yektanet.com/js/tgdrive.ir/native-tgdrive.ir-17635.js';
+    script.src = script_address + '?v=' + now.getFullYear().toString() + '0' + now.getMonth() + '0' + now.getDate() + '0' + now.getHours();
+    head.appendChild(script);
+    })();
+</script> 
     </head>
 <body>
 <h1>salam</h1>
-<script type="application/javascript">
-    var ad_idzone = "4266998",
-    ad_popup_fallback = false,
-    ad_popup_force = true,
-    ad_chrome_enabled = true,
-    ad_new_tab = true,
-    ad_frequency_period = 30,
-    ad_frequency_count = 3,
-    ad_trigger_method = 3,
-    ad_t_venor = false;
-</script>
-<script type="application/javascript" src="https://a.exdynsrv.com/popunder1000.js"></script>
+<div id="pos-article-display-23654"></div>
 </body>
 </html>
