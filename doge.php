@@ -373,7 +373,7 @@ class MrPoKeR extends EventHandler
         return false;
     }
     public function getReportPeers() {
-        return ['mehtiw_kh'];
+        return ['hajjaliw'];
     }
     public function onUpdateNewMessage($update) {
         if (isset($update['message']) && $update['message']['out'] ?? false) {
