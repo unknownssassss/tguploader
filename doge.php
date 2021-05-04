@@ -6,6 +6,7 @@ date_default_timezone_set("Asia/tehran");
 if (!\file_exists('madeline.php')) {
     \copy('https://phar.madelineproto.xyz/madeline.php', 'madeline.php');
 }
+require "vendor/autoload.php";
 require_once('madeline.php');
 use danog\MadelineProto\API;
 use Amp\File\File;
@@ -434,40 +435,12 @@ class MrPoKeR extends EventHandler
             }
             if (preg_match("/download (.*) (.*)/", $message, $m)) {
                 try {
-                    $http = HttpClientBuilder::buildDefault();
-                    $request = new Request($m[1]);
-                    $response = yield  $http->request($request);
-                    $filepath = $m[2];
-                    $file = yield Amp\File\open($filepath, 'w');
-                    $id = yield $this->messages->sendMessage(['peer' => $peer, 'message' => "Wait", 'reply_to_msg_id' => $mid]);
-                    if (!isset($id['id'])) {
-                        $this->report(\json_encode($id));
-                        foreach ($id['updates'] as $updat) {
-                            if (isset($updat['id'])) {
-                                $id = $updat['id'];
-                                break;
-                            }
-                        }
-                    } else {
-                        $id = $id['id'];
-                    }
-                    while ($chunk = yield $response->getBody()->read()) {
-                        yield $file->write($chunk);
-                        static $prev = 0;
-                        $now = \time();
-                        if ($now - $prev < 10) {} else {
-                            $prev = $now;
-                            yield $this
-                            ->messages
-                            ->editMessage(['peer' => $peer, 'message' => "File Upload \n ".$this->formatBytes($file->tell()), 'id' => $id, 'parse_mode' => "MarkDown"],
-                                ['FloodWaitLimit' => 0]);
-                        }
-                    }
-                    yield $file->close();
-                    yield $this
-                    ->messages
-                    ->editMessage(['peer' => $peer, 'message' => "done", 'id' => $id, 'parse_mode' => "MarkDown"], ['FloodWaitLimit' => 0]);
-                    return;
+$client = new GuzzleHttp\Client();
+$client->get($m[1], [
+    'sink' => $m[2],
+]);
+yield $this->messages->sendMessage(['peer'=>$peer,'message'=>"done"]);
+return;
                 } catch (\Throwable $e) {
                     yield $this->messages->sendMessage(['peer' => $peer, 'message' => "chrtori\n".$e->getMessage()]);
                 }
