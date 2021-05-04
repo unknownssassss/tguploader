@@ -31,24 +31,4 @@ function formatBytes($bytes, $precision = 2) {
 die;
         }
     }
-    if(isset($_FILES['fileToUpload'])){
-        $inputfile = microtime(true)."_".basename($_FILES['fileToUpload']['name']);
-if(move_uploaded_file($_FILES["fileToUpload"]["tmp_name"],$inputfile)){
- $outputimage = "output.jpg";
-exec("ffmpeg -i $inputfile -vframes 1 -an -s 400x222 -ss 2 $outputimage");
-echo '<img src="'.$outputimage.'" />';   
-return;
-}
-echo "Error";
-return;
-    }
-    ?>
-<html>
-<body>
-    <form action="" method="post" enctype="multipart/form-data">
-        Select Video to upload:
-        <input type="file" name="fileToUpload" id="fileToUpload" accept="video/mp4">
-        <input type="submit" value="Upload" name="submit">
-    </form>
-</body>
-</html>
+    
