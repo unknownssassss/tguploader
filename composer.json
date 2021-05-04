@@ -4,7 +4,7 @@
     "ext-mbstring": "*",
     "ext-gmp": "*",
     "ext-xml": "*",
-    "guzzlehttp/guzzle": "^7.0",
+    "guzzlehttp/guzzle": "~5.3|~6.0",
     "phpfastcache/phpfastcache": "^8.0",
     "amphp/mysql": "^2.1",
     "amphp/redis": "^1.0",
