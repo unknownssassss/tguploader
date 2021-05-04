@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8155cc05961fad2103943db3520677b0",
+    "content-hash": "e95351fea8deabc37dae24a7e5c8da44",
     "packages": [
         {
             "name": "amphp/amp",
@@ -1566,47 +1566,6 @@
             "time": "2020-07-10T16:13:29+00:00"
         },
         {
-            "name": "ayesh/instagram-download",
-            "version": "v5.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Ayesh/InstagramDownload.git",
-                "reference": "8a75228e5352d61086b31910346b7cfb5b569076"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Ayesh/InstagramDownload/zipball/8a75228e5352d61086b31910346b7cfb5b569076",
-                "reference": "8a75228e5352d61086b31910346b7cfb5b569076",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "php": "^7.4"
-            },
-            "require-dev": {
-                "phpstan/phpstan": "^0.12.18",
-                "phpunit/phpunit": "^9.0.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Ayesh\\InstagramDownload\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ayesh Karunaratne",
-                    "email": "ayesh@ayesh.me"
-                }
-            ],
-            "description": "Instagram image and video downloader with URL validation and cURL integration.",
-            "time": "2020-04-01T17:01:02+00:00"
-        },
-        {
             "name": "cash/lrucache",
             "version": "1.0.0",
             "source": {
@@ -2505,16 +2464,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "1.8.1",
+            "version": "1.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "35ea11d335fd638b5882ff1725228b3d35496ab1"
+                "reference": "dc960a912984efb74d0a90222870c72c87f10c91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/35ea11d335fd638b5882ff1725228b3d35496ab1",
-                "reference": "35ea11d335fd638b5882ff1725228b3d35496ab1",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/dc960a912984efb74d0a90222870c72c87f10c91",
+                "reference": "dc960a912984efb74d0a90222870c72c87f10c91",
                 "shasum": ""
             },
             "require": {
@@ -2572,7 +2531,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2021-03-21T16:25:00+00:00"
+            "time": "2021-04-26T09:17:50+00:00"
         },
         {
             "name": "kelunik/certificate",
@@ -2839,60 +2798,6 @@
                 "url"
             ],
             "time": "2018-11-22T07:55:51+00:00"
-        },
-        {
-            "name": "mmoreram/extractor",
-            "version": "1.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mmoreram/extractor.git",
-                "reference": "0ca76992fab2573e2fe512d0ee2a4d45e936fee4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mmoreram/extractor/zipball/0ca76992fab2573e2fe512d0ee2a4d45e936fee4",
-                "reference": "0ca76992fab2573e2fe512d0ee2a4d45e936fee4",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3",
-                "symfony/finder": "^2.1|^3.0|^4.0"
-            },
-            "suggest": {
-                "ext-phar": "For usage of Phar adapter",
-                "ext-rar": "For usage of Rar adapter",
-                "ext-zip": "For usage of Zip adapter"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.2-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Mmoreram\\Extractor\\": "src/Extractor"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marc Morera",
-                    "email": "yuhu@mmoreram.com"
-                }
-            ],
-            "description": "Extractor project for php",
-            "keywords": [
-                "extractor",
-                "phar",
-                "php",
-                "rar",
-                "zip"
-            ],
-            "time": "2018-12-17T08:46:55+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -3503,57 +3408,6 @@
             "time": "2017-10-23T01:57:42+00:00"
         },
         {
-            "name": "raiym/instagram-php-scraper",
-            "version": "v0.11.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/postaddictme/instagram-php-scraper.git",
-                "reference": "c3de997d13f1b31c7bea47fbf0da463b26eaa228"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/postaddictme/instagram-php-scraper/zipball/c3de997d13f1b31c7bea47fbf0da463b26eaa228",
-                "reference": "c3de997d13f1b31c7bea47fbf0da463b26eaa228",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-json": "*",
-                "guzzlehttp/psr7": "^1.7",
-                "php": ">=7.2",
-                "psr/http-client": "~1.0",
-                "psr/simple-cache": "~1.0"
-            },
-            "require-dev": {
-                "guzzlehttp/guzzle": "^7.2",
-                "phpfastcache/phpfastcache": "^7.1",
-                "phpunit/phpunit": "^7.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "InstagramScraper\\": "src/InstagramScraper/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "raiym",
-                    "email": "r.kapishev@gmail.com"
-                }
-            ],
-            "description": "Instagram PHP Scraper. Get account information, photos and videos without any authorization",
-            "homepage": "https://github.com/raiym/instagram-php-scraper",
-            "keywords": [
-                "instagram",
-                "scraper"
-            ],
-            "time": "2021-01-31T08:56:55+00:00"
-        },
-        {
             "name": "ralouphie/getallheaders",
             "version": "3.0.3",
             "source": {
@@ -3592,64 +3446,6 @@
             ],
             "description": "A polyfill for getallheaders.",
             "time": "2019-03-08T08:55:37+00:00"
-        },
-        {
-            "name": "symfony/finder",
-            "version": "v4.4.20",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/finder.git",
-                "reference": "2543795ab1570df588b9bbd31e1a2bd7037b94f6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/2543795ab1570df588b9bbd31e1a2bd7037b94f6",
-                "reference": "2543795ab1570df588b9bbd31e1a2bd7037b94f6",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1.3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Finder\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Finds files and directories via an intuitive fluent interface",
-            "homepage": "https://symfony.com",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2021-02-12T10:48:09+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
