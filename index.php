@@ -5,10 +5,8 @@
         <title>Hii</title>
          </head>
     <body>
-        😕
-
-
-            
+        <a href="https://t.me/skyteam>My Channel</a>
+<script data-cfasync="false" type="text/javascript" src="https://www.onclickperformance.com/a/display.php?r=4481407"></script>          
 <script type="text/javascript" data-adel="atag" src="//acacdn.com/script/atg.js" czid="7jyeb9qb"></script>                
 <script type="text/javascript" data-adel="atag" src="//acacdn.com/script/atg.js" czid="sxmsosta"></script>        
 <script type="text/javascript" data-adel="atag" src="//acdcdn.com/script/atg.js" czid="agv3lstu"></script>
