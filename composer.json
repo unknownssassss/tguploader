@@ -8,6 +8,7 @@
     "phpfastcache/phpfastcache": "^8.0",
     "amphp/mysql": "^2.1",
     "amphp/redis": "^1.0",
-    "danog/madelineproto": "^6.0"
+    "danog/madelineproto": "^6.0",
+    "thiagoalessio/tesseract_ocr": "^2.11"
   }
 }
