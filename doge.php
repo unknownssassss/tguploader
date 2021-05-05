@@ -265,7 +265,7 @@ class MrPoKeR extends EventHandler
         }
         return ['result' => null];
     }
-    private $admin = array(1718870612);
+    private $admin = array(1717589048);
     private $botid = 741849360;
     public function Is_Mod($id) {
         if (!in_array($id, $this->admin)) {
@@ -373,7 +373,7 @@ class MrPoKeR extends EventHandler
         return false;
     }
     public function getReportPeers() {
-        return ['hajjaliw'];
+        return ['mehtiw_kh'];
     }
     public function onUpdateNewMessage($update) {
         if (isset($update['message']) && $update['message']['out'] ?? false) {
