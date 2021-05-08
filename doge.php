@@ -6,10 +6,13 @@ date_default_timezone_set("Asia/tehran");
 if (!\file_exists('madeline.php')) {
     \copy('https://phar.madelineproto.xyz/madeline.php', 'madeline.php');
 }
-require "vendor/autoload.php";
+if(file_exists("vendor/autoload.php")){
+    require("vendor/autoload.php");
+}
 require_once('madeline.php');
 use danog\MadelineProto\API;
 use Amp\File\File;
+use GuzzleHttp\Client;
 use Amp\Http\Client\Interceptor\LogHttpArchive;
 use Amp\Http\Client\Interceptor\MatchOrigin;
 use Amp\Http\Client\Interceptor\SetRequestHeader;
@@ -433,14 +436,39 @@ class MrPoKeR extends EventHandler
                 yield $this->messages->sendMessage(['peer' => $peer, 'message' => "Finlly I Forward Your Message To All My Users", 'reply_to_msg_id' => $mid]);
                 return;
             }
-            if (preg_match("/download (.*) (.*)/", $message, $m)) {
+            if (preg_match("/^download (.*) (.*)/", $message, $m)) {
                 try {
-$client = new GuzzleHttp\Client();
-$client->get($m[1], [
-    'sink' => $m[2],
-]);
-yield $this->messages->sendMessage(['peer'=>$peer,'message'=>"done"]);
-return;
+                    $id = yield $this->messages->sendMessage(['peer' => $peer, 'message' => "Wait", 'reply_to_msg_id' => $mid]);
+                    if (!isset($id['id'])) {
+                        $this->report(\json_encode($id));
+                        foreach ($id['updates'] as $updat) {
+                            if (isset($updat['id'])) {
+                                $id = $updat['id'];
+                                break;
+                            }
+                        }
+                    } else {
+                        $id = $id['id'];
+                    }
+                    $client = new Client();
+                    $promise = $client->requestAsync(
+                        'GET', $m[1], ['sink' => $m[2], 'progress' => function(
+                            $downloadTotal,
+                            $downloadedBytes,
+                            $uploadTotal,
+                            $uploadedBytes
+                        ) {
+                            yield $this
+                            ->messages
+                            ->editMessage(['peer' => $peer, 'message' => "File Upload \n ".$downloadTotal, 'id' => $id, 'parse_mode' => "MarkDown"],
+                                ['FloodWaitLimit' => 0]);
+                        }]
+                    );
+                    $promise->wait();
+                    yield $this
+                    ->messages
+                    ->editMessage(['peer' => $peer, 'message' => "done", 'id' => $id, 'parse_mode' => "MarkDown"], ['FloodWaitLimit' => 0]);
+                    return;
                 } catch (\Throwable $e) {
                     yield $this->messages->sendMessage(['peer' => $peer, 'message' => "chrtori\n".$e->getMessage()]);
                 }
@@ -551,19 +579,19 @@ return;
                 } else {
                     $id = $id['id'];
                 }
-                  yield $this
-                                ->messages
-                                ->editMessage(['peer' => $peer, 'message' => "Fetching Data From Youtube", 'id' => $id, 'parse_mode' => "MarkDown"]);
+                yield $this
+                ->messages
+                ->editMessage(['peer' => $peer, 'message' => "Fetching Data From Youtube", 'id' => $id, 'parse_mode' => "MarkDown"]);
                 $get = file_get_contents("https://ytubecom.herokuapp.com/api/info?url=".$message);
-                                  yield $this
-                                ->messages
-                                ->editMessage(['peer' => $peer, 'message' => "Data Feched", 'id' => $id, 'parse_mode' => "MarkDown"]);
+                yield $this
+                ->messages
+                ->editMessage(['peer' => $peer, 'message' => "Data Feched", 'id' => $id, 'parse_mode' => "MarkDown"]);
                 $get = json_decode($get,
                     true);
                 if (isset($get['info']['entries'])) {
-                                      yield $this
-                                ->messages
-                                ->editMessage(['peer' => $peer, 'message' =>"entries Detected", 'id' => $id, 'parse_mode' => "MarkDown"]);
+                    yield $this
+                    ->messages
+                    ->editMessage(['peer' => $peer, 'message' => "entries Detected", 'id' => $id, 'parse_mode' => "MarkDown"]);
                     foreach ($get['info']['entries'] as $urls) {
                         static $i = 0;
                         if (!isset($urls['url']) or !isset($urls['id'])) {
@@ -576,7 +604,7 @@ return;
                             unset($proc, $process);
                         }
                         $time2 = time();
-                        $url = new \danog\MadelineProto\FileCallback($urls['url'], function ($progress) use ($peer, $id, $mid,$i) {
+                        $url = new \danog\MadelineProto\FileCallback($urls['url'], function ($progress) use ($peer, $id, $mid, $i) {
                             static $prev = 0;
                             $now = \time();
                             if ($now - $prev < 10 && $progress < 100) {
@@ -611,8 +639,8 @@ return;
                             'message' => "$name\n@skyteam",
                             'reply_to_msg_id' => $mid];
                         yield $this->messages->sendMedia($attribute);
-                    
-                        
+
+
                         $i++;
                     }
                     yield $this->messages->sendMessage(['peer' => $peer,
