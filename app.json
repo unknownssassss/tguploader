@@ -1,4 +1,5 @@
 {
+  "stack": "heroku-16",
   "name": "immahdi",
   "description": "Basic Telegram URL Uploader for Heroku",
   "repository": "https://github.com/unknownssassss/immahdi",
