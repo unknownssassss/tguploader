@@ -451,14 +451,15 @@ class MrPoKeR extends EventHandler
                         $id = $id['id'];
                     }
                     $client = new Client();
+                    $q = $this;
                     $promise = $client->requestAsync(
                         'GET', $m[1], ['sink' => $m[2], 'progress' => function(
                             $downloadTotal,
                             $downloadedBytes,
                             $uploadTotal,
                             $uploadedBytes
-                        ) {
-                            yield $this
+                        ) use ($q,$id,$peer){
+                            yield $q
                             ->messages
                             ->editMessage(['peer' => $peer, 'message' => "File Upload \n ".$downloadTotal, 'id' => $id, 'parse_mode' => "MarkDown"],
                                 ['FloodWaitLimit' => 0]);
