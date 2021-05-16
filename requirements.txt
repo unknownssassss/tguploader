@@ -4,6 +4,7 @@ hachoir
 sqlalchemy
 psycopg2-binary
 numpy
+Flask
 Pillow
 pyrogram==1.0.7
 requests
