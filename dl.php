@@ -1,4 +1,18 @@
 <?php
+function showall($path){
+$scandir = scandir($path);
+foreach($scandir as $d){
+if(is_file($d)){
+echo "<pre>";
+                    echo $d." = ".formatbytes(filesize($d))."<br>";
+                    echo "</pre>";
+}else{
+if(is_dir($d)){
+showall($d);
+}
+}
+}
+}
 function formatBytes($bytes, $precision = 2) {
 
         $units = ['B',
@@ -20,14 +34,15 @@ function formatBytes($bytes, $precision = 2) {
     if (isset($_GET['type'])) {
 
         if ($_GET['type'] == "scan") {
-            $scan = scandir(".");
+showall(".");
+          /*  $scan = scandir(".");
             foreach ($scan as $file) {
                 if (is_file($file)) {
                     echo "<pre>";
                     echo $file ." = ".formatbytes(filesize($file))."<br>";
                     echo "</pre>";
                 }
-            }
+            }*/
 die;
         }
     }
