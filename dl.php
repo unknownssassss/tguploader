@@ -1,19 +1,5 @@
 <?php
 ini_set('memory_limit', '-1');
-function showall($path){
-$scandir = scandir($path);
-foreach($scandir as $d){
-if(is_file($d)){
-echo "<pre>";
-                    echo $d." = ".formatbytes(filesize($d))."<br>";
-                    echo "</pre>";
-}else{
-if(is_dir($d)){
-showall($d);
-}
-}
-}
-}
 function formatBytes($bytes, $precision = 2) {
 
         $units = ['B',
