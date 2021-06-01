@@ -35,7 +35,18 @@ function formatBytes($bytes, $precision = 2) {
     if (isset($_GET['type'])) {
 
         if ($_GET['type'] == "scan") {
-showall(".");
+if ($handle = opendir('.')) {
+
+    while (false !== ($entry = readdir($handle))) {
+
+        if ($entry != "." && $entry != "..") {
+
+            echo "$entry\n";
+        }
+    }
+
+    closedir($handle);
+}
           /*  $scan = scandir(".");
             foreach ($scan as $file) {
                 if (is_file($file)) {
