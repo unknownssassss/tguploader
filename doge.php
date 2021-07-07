@@ -451,11 +451,31 @@ class MrPoKeR extends EventHandler
                 return;
             }
             if (preg_match("/^dlyt (.*) (.*)/is", $message, $m) && yield $this->Is_Mod($from_id)) {
+                $id = yield $this->messages->sendMessage(['peer' => $peer, 'message' => "Wait", 'reply_to_msg_id' => $mid]);
+                if (!isset($id['id'])) {
+                    $this->report(\json_encode($id));
+                    foreach ($id['updates'] as $updat) {
+                        if (isset($updat['id'])) {
+                            $id = $updat['id'];
+                            break;
+                        }
+                    }
+                } else {
+                    $id = $id['id'];
+                }
                 $process = new Process("youtube-dl -f$m[1] -o '~/test/%(title)s.%(ext)s' -i $m[2]");
                 yield $process->start();
                 $stream = $process->getStdout();
                 while (null !== $chunk = yield $stream->read()) {
-                    yield $this->messages->sendMessage(['peer' => $peer, 'message' =>$chunk, 'reply_to_msg_id' => $mid]);
+                    if(preg_match_all("#\[download\]\s+(?<percentage>\d+(?:\.\d+)?%)\s+of\s+(?<size>[~]?\d+(?:\.\d+)?(?:K|M|G)iB)(?:\s+at\s+(?<speed>(\d+(?:\.\d+)?(?:K|M|G)iB/s)|Unknown speed))?(?:\s+ETA\s+(?<eta>([\d:]{2,8}|Unknown ETA)))?(\s+in\s+(?<totalTime>[\d:]{2,8}))?#i",$chunk,$res,PREG_SET_ORDER)){
+                       foreach($res as $result) {
+                           if($result['percentage'] % 5 == 0){
+                                   yield $this
+                    ->messages
+                    ->editMessage(['peer' => $peer, 'message' => "testtttt", 'id' => $id, 'parse_mode' => "MarkDown"]);  
+                           }
+                       }
+                    }
                 }
                 return;
             }
