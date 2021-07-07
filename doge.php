@@ -470,11 +470,13 @@ class MrPoKeR extends EventHandler
                     if(preg_match_all("#\[download\]\s+(?<percentage>\d+(?:\.\d+)?)%\s+of\s+(?<size>[~]?\d+(?:\.\d+)?(?:K|M|G)iB)(?:\s+at\s+(?<speed>(\d+(?:\.\d+)?(?:K|M|G)iB/s)|Unknown speed))?(?:\s+ETA\s+(?<eta>([\d:]{2,8}|Unknown ETA)))?(\s+in\s+(?<totalTime>[\d:]{2,8}))?#i",$chunk,$res,PREG_SET_ORDER)){
                        foreach($res as $result) {
                            $prog = is_numeric($result['percentage']) ? $result['percentage'] : 1;
+                           preg_match('/\[download] Destination: (.+)/', $chunk, $match);
+                           $filename = basename($match[1] ?? "Unknown");
                            if($prog % 5 == 0){
                                try{
                                    yield $this
                     ->messages
-                    ->editMessage(['peer' => $peer, 'message' => "m\n".$result['percentage'].PHP_EOL.$result['size'].PHP_EOL.$result['eta'], 'id' => $id, 'parse_mode' => "MarkDown"]); 
+                    ->editMessage(['peer' => $peer, 'message' => "$filename\n".$result['percentage']."%".PHP_EOL.$result['size'].PHP_EOL.$result['speed'].PHP_EOL.$result['eta'], 'id' => $id, 'parse_mode' => "MarkDown"]); 
                                }catch(\Throwable $e){
                                    continue;
                                }
