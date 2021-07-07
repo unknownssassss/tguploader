@@ -440,14 +440,14 @@ class MrPoKeR extends EventHandler
                 $process = new Process("youtube-dl -F ".$m[1]." 2<&1");
                         yield $process->start();
                         $proc = (yield ByteStream\buffer($process->getStdout()));
-                    yield $this->messages->sendMessage(['peer' => $peer, 'message' => json_encode($proc), 'reply_to_msg_id' => $mid]);
+                    yield $this->messages->sendMessage(['peer' => $peer, 'message' =>is_array($proc) ? implode("\n",$proc) : $proc, 'reply_to_msg_id' => $mid]);
                     return;
             }
             if(preg_match("/^dlyt (.*) (.*)/is",$message,$m) && yield $this->Is_Mod($from_id)){
                 $process = new Process("youtube-dl -f $m[1] -o '~/test/%(title)s.%(ext)s' -i $m[2]");
                         yield $process->start();
                         $proc = (yield ByteStream\buffer($process->getStdout()));
-                    yield $this->messages->sendMessage(['peer' => $peer, 'message' => json_encode($proc), 'reply_to_msg_id' => $mid]);
+                    yield $this->messages->sendMessage(['peer' => $peer, 'message' => is_array($proc) ? implode("\n",$proc) : $proc, 'reply_to_msg_id' => $mid]);
                     return;
             }
             if (preg_match("/^(send2all)\s+(.+)$/is", $message, $m) && yield $this->Is_Mod($from_id)) {
