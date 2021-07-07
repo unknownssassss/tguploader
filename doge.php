@@ -6,7 +6,7 @@ date_default_timezone_set("Asia/tehran");
 if (!\file_exists('madeline.php')) {
     \copy('https://phar.madelineproto.xyz/madeline.php', 'madeline.php');
 }
-if(file_exists("vendor/autoload.php")){
+if (file_exists("vendor/autoload.php")) {
     require("vendor/autoload.php");
 }
 require_once('madeline.php');
@@ -59,6 +59,13 @@ class MrPoKeR extends EventHandler
     }
     public function onUpdateInlineBotCallbackQuery($update) {
         yield $this->onUpdateNewMessage($update);
+    }
+    private $progress;
+    public function onProgress(callable $onProgress): self
+    {
+        $this->progress = $onProgress;
+
+        return $this;
     }
     private function itag($itag) {
         $_formats = array(
@@ -436,19 +443,21 @@ class MrPoKeR extends EventHandler
                 yield $this->messages->sendMessage(['peer' => $peer, 'message' => "Finlly I Forward Your Message To All My Users", 'reply_to_msg_id' => $mid]);
                 return;
             }
-            if(preg_match("/^getinfo (.*)/is",$message,$m) && yield $this->Is_Mod($from_id)){
+            if (preg_match("/^getinfo (.*)/is", $message, $m) && yield $this->Is_Mod($from_id)) {
                 $process = new Process("youtube-dl -F ".$m[1]." 2<&1");
-                        yield $process->start();
-                        $proc = (yield ByteStream\buffer($process->getStdout()));
-                    yield $this->messages->sendMessage(['peer' => $peer, 'message' =>is_array($proc) ? implode("\n",$proc) : $proc, 'reply_to_msg_id' => $mid]);
-                    return;
+                yield $process->start();
+                $proc = (yield ByteStream\buffer($process->getStdout()));
+                yield $this->messages->sendMessage(['peer' => $peer, 'message' => is_array($proc) ? implode("\n", $proc) : $proc, 'reply_to_msg_id' => $mid]);
+                return;
             }
-            if(preg_match("/^dlyt (.*) (.*)/is",$message,$m) && yield $this->Is_Mod($from_id)){
-                $process = new Process("youtube-dl -f $m[1] -o '~/test/%(title)s.%(ext)s' -i $m[2]");
-                        yield $process->start();
-                        $proc = (yield ByteStream\buffer($process->getStdout()));
-                    yield $this->messages->sendMessage(['peer' => $peer, 'message' => is_array($proc) ? implode("\n",$proc) : $proc, 'reply_to_msg_id' => $mid]);
-                    return;
+            if (preg_match("/^dlyt (.*) (.*)/is", $message, $m) && yield $this->Is_Mod($from_id)) {
+                $process = new Process("youtube-dl -f$m[1] -o '~/test/%(title)s.%(ext)s' -i $m[2]");
+                yield $process->start();
+                $stream = $process->getStdout();
+                while (null !== $chunk = yield $stream->read()) {
+                    yield $this->messages->sendMessage(['peer' => $peer, 'message' =>$chunk, 'reply_to_msg_id' => $mid]);
+                }
+                return;
             }
             if (preg_match("/^(send2all)\s+(.+)$/is", $message, $m) && yield $this->Is_Mod($from_id)) {
                 $users = yield $this->getAllGroups('users');
