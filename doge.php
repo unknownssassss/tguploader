@@ -471,9 +471,13 @@ class MrPoKeR extends EventHandler
                        foreach($res as $result) {
                            $prog = is_numeric($result['percentage']) ? $result['percentage'] : 1;
                            if($prog % 5 == 0){
+                               try{
                                    yield $this
                     ->messages
-                    ->editMessage(['peer' => $peer, 'message' => "m\n".$result['percentage'], 'id' => $id, 'parse_mode' => "MarkDown"]);  
+                    ->editMessage(['peer' => $peer, 'message' => "m\n".$result['percentage'].PHP_EOL.$result['size'].PHP_EOL.$result['eta'], 'id' => $id, 'parse_mode' => "MarkDown"]); 
+                               }catch(\Throwable $e){
+                                   continue;
+                               }
                            }
                        }
                     }
