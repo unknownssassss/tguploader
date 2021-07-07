@@ -467,7 +467,7 @@ class MrPoKeR extends EventHandler
                 yield $process->start();
                 $stream = $process->getStdout();
                 while (null !== $chunk = yield $stream->read()) {
-                    if(preg_match_all("#\[download\]\s+(?<percentage>\d+(?:\.\d+)?%)\s+of\s+(?<size>[~]?\d+(?:\.\d+)?(?:K|M|G)iB)(?:\s+at\s+(?<speed>(\d+(?:\.\d+)?(?:K|M|G)iB/s)|Unknown speed))?(?:\s+ETA\s+(?<eta>([\d:]{2,8}|Unknown ETA)))?(\s+in\s+(?<totalTime>[\d:]{2,8}))?#i",$chunk,$res,PREG_SET_ORDER)){
+                    if(preg_match_all("#\[download\]\s+(?<percentage>\d+(?:\.\d+)?)%\s+of\s+(?<size>[~]?\d+(?:\.\d+)?(?:K|M|G)iB)(?:\s+at\s+(?<speed>(\d+(?:\.\d+)?(?:K|M|G)iB/s)|Unknown speed))?(?:\s+ETA\s+(?<eta>([\d:]{2,8}|Unknown ETA)))?(\s+in\s+(?<totalTime>[\d:]{2,8}))?#i",$chunk,$res,PREG_SET_ORDER)){
                        foreach($res as $result) {
                            $prog = is_numeric($result['percentage']) ? $result['percentage'] : 1;
                            if($prog % 5 == 0){
