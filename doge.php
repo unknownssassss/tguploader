@@ -9,7 +9,7 @@ if (!\file_exists('madeline.php')) {
 if (file_exists("vendor/autoload.php")) {
     require("vendor/autoload.php");
 }
-require_once('madeline.php');
+include "madeline.phar";
 use danog\MadelineProto\API;
 use Amp\File\File;
 use GuzzleHttp\Client;
