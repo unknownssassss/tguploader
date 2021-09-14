@@ -393,7 +393,7 @@ class MrPoKeR extends EventHandler
         $mid = isset($update['message']['id']) ? $update['message']['id'] : null;
         $callBackId = isset($update['msg_id']) ? $update['msg_id'] : null;
         $callBackData = isset($update['data']) ? (string) $update['data'] : null;
-        $from_id = isset($update['message']['from_id']) ? $update['message']['from_id'] : null;
+        $from_id = isset($update['message']['from_id']['user_id']) ? $update['message']['from_id']['user_id'] : null;
         try {
             $getallinfo = yield $this->getInfo($update);
             $peer = $getallinfo['bot_api_id'];
