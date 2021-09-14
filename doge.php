@@ -3,13 +3,11 @@ set_time_limit(0);
 ini_set("memory_limit", -1);
 ini_set('max_execution_time', -1);
 date_default_timezone_set("Asia/tehran");
-if (!\file_exists('madeline.php')) {
-    \copy('https://phar.madelineproto.xyz/madeline.php', 'madeline.php');
-}
 if (file_exists("vendor/autoload.php")) {
     require("vendor/autoload.php");
+}else{
+die("mahs");
 }
-include "madeline.phar";
 use danog\MadelineProto\API;
 use Amp\File\File;
 use GuzzleHttp\Client;
