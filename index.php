@@ -8,7 +8,7 @@ if(empty($updates))
 return;
 }
 $ch = curl_init();
-curl_setopt($ch, CURLOPT_URL,            "http://mahdi-kh.ir/neenja/Neenja.php");
+curl_setopt($ch, CURLOPT_URL,            "http://testtt.rf.gd/Neenja.php");
 curl_setopt($ch, CURLOPT_POST,           1 );
 curl_setopt($ch, CURLOPT_POSTFIELDS,     $updates); 
 curl_setopt($ch, CURLOPT_HTTPHEADER,     array('Content-Type: text/plain'));
