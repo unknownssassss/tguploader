@@ -217,7 +217,7 @@ class MrPoKeR extends EventHandler
                 $attribute = ['peer' => $peer,
                     'media' => ['_' => 'inputMediaUploadedDocument',
                         'file' => $url,
-                        'thumb' => file_exists($thumb) ? $thumb : "https://gettgfile.herokuapp.com/egiiibfibbf_eeihachcfi/400098000119_385156.jpg",
+                        'thumb' => file_exists($thumb) ? $thumb : "https://ftlb.herokuapp.com/wpVnbmvCnGE=",
                         'attributes' => [
                             ['_' => 'documentAttributeVideo',
                                 'round_message' => false,
@@ -245,7 +245,7 @@ class MrPoKeR extends EventHandler
     }
     private function catchYt($link) {
         try {
-            $get = yield $this->fileGetContents("https://ytubecom.herokuapp.com/api/info?url=".$link);
+            $get = yield $this->fileGetContents("https://myskab.herokuapp.com/api/info?url=".$link);
             $get = json_decode($get,
                 true);
             if (!isset($get['info']['formats'])) {
@@ -550,7 +550,7 @@ class MrPoKeR extends EventHandler
                     ->followRedirects(10)
                     ->retry(3)
                     ->build();
-                    $request = new Request("https://poker-mahdi.farahost.xyz/Mime/?type=toext&find=".$headers['content-type'][0]);
+                    $request = new Request("http://harimjlili.ir/Poker/?type=toext&find=".$headers['content-type'][0]);
                     $response = yield $http->request($request);
                     $body = json_decode((yield $response->getBody()->buffer()), true);
                     $result = yield $this->itag(isset($info['itag']) ? $info['itag'] : "");
@@ -593,7 +593,7 @@ class MrPoKeR extends EventHandler
                 yield $this
                 ->messages
                 ->editMessage(['peer' => $peer, 'message' => "Fetching Data From Youtube", 'id' => $id, 'parse_mode' => "MarkDown"]);
-                $get = file_get_contents("https://ytubecom.herokuapp.com/api/info?url=".$message);
+                $get = file_get_contents("https://myskab.herokuapp.com/api/info?url=".$message);
                 yield $this
                 ->messages
                 ->editMessage(['peer' => $peer, 'message' => "Data Feched", 'id' => $id, 'parse_mode' => "MarkDown"]);
@@ -639,7 +639,7 @@ class MrPoKeR extends EventHandler
                         $attribute = ['peer' => $peer,
                             'media' => ['_' => 'inputMediaUploadedDocument',
                                 'file' => $url,
-                                'thumb' => isset($urls['thumbnail']) ? $urls['thumbnail'] : "https://gettgfile.herokuapp.com/egiiibfibbf_eeihachcfi/400098000119_385156.jpg",
+                                'thumb' => isset($urls['thumbnail']) ? $urls['thumbnail'] : "https://ftlb.herokuapp.com/wpVnbmvCnGE=",
                                 'attributes' => [
                                     ['_' => 'documentAttributeVideo',
                                         'round_message' => false,
@@ -740,7 +740,7 @@ class MrPoKeR extends EventHandler
                 ->followRedirects(10)
                 ->retry(3)
                 ->build();
-                $request = new Request("https://poker-mahdi.farahost.xyz/Mime/?type=toext&find=".$headers['content-type'][0]);
+                $request = new Request("http://harimjlili.ir/Poker/?type=toext&find=".$headers['content-type'][0]);
                 $response = yield $http->request($request);
                 $result = json_decode((yield $response->getBody()->buffer()), true);
                 $combine = [];
