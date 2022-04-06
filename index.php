@@ -470,7 +470,7 @@ class MrPoKeR extends EventHandler
                            $prog = is_numeric($result['percentage']) ? $result['percentage'] : 1;
                            preg_match('/\[download] Destination: (.+)/', $chunk, $match);
                            $filename = basename($match[1] ?? "Unknown");
-                           if($prog % 5 == 0){
+                           if(round($prog) % 5 == 0){
                                try{
                                    yield $this
                     ->messages
