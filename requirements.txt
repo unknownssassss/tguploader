@@ -9,3 +9,5 @@ Pillow
 pyrogram
 requests
 tgcrypto
+yt-dlp
+youtube-dl
