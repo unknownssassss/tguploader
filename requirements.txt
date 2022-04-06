@@ -9,5 +9,3 @@ Pillow
 pyrogram
 requests
 tgcrypto
-youtube-dl
-git+https://github.com/prgofficial/YouTubeDL
