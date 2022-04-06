@@ -356,13 +356,13 @@ class MrPoKeR extends EventHandler
     }
     public function XForEta($mis) {
         $seconds = $mis / 1000;
-        $mils = round($mis % 1000);
+        $mils = round(round($mis) % 1000);
         $minutes = $seconds / 60;
-        $seconds = round($seconds % 60);
+        $seconds = round(round($seconds) % 60);
         $hours = $minutes / 60;
-        $minutes = round($minutes % 60);
-        $days = round($hours / 24);
-        $hours = round($hours % 24);
+        $minutes = round(round($minutes) % 60);
+        $days = round(round($hours) / 24);
+        $hours = round(round($hours) % 24);
         $tmp = (($days ? $days . " Day " : "") . "" . ($hours ? $hours . " H " : "") . "" . ($minutes ? $minutes . " Min " : "") . "" . ($seconds ? $seconds . " Sec " : "") . "" . ($mils ? $mils . " Ms " : ""));
         return $tmp;
     }
