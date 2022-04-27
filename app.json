@@ -8,10 +8,4 @@
 "buildpacks": [{
     "url": "heroku/python"
   }],
-"env": {
-    "TOKEN": {
-      "description": "TELEGRAM BOT TOKEN",
-      "value": "TOKEN"
-    }
-}
 }
