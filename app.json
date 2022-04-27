@@ -6,7 +6,7 @@
   "logo": "http://icons.iconarchive.com/icons/graphicloads/100-flat/256/upload-icon.png",
   "keywords": ["telegram", "url", "upload"],
 "buildpacks": [{
-    "url": "heroku/python",
+    "url": "heroku/python"
   },
   {
     "url": "heroku/php"
