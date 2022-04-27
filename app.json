@@ -7,5 +7,5 @@
   "keywords": ["telegram", "url", "upload"],
 "buildpacks": [{
     "url": "heroku/python"
-  }],
+  }]
 }
